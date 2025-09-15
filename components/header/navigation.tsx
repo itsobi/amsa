@@ -21,27 +21,37 @@ import { useIsTablet } from '@/lib/hooks/use-is-tablet';
 import { Logo } from './logo';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ChevronDown, ChevronRight, Menu } from 'lucide-react';
 import {
   AMSAPoliciesNavigationItems,
   leagueNavigationItems,
   sheetNavigationItems,
 } from '@/lib/routes';
+import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
+
+const linkClassName =
+  'group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50';
 
 function ListItem({
   href,
   label,
   icon,
+  isActive,
 }: {
   href: string;
   label: string;
   icon?: React.ReactNode;
+  isActive?: boolean;
 }) {
   return (
     <Link
       href={href}
-      className="flex items-center gap-2 justify-start w-full text-sm hover:bg-accent p-2 rounded"
+      className={cn(
+        'flex items-center gap-2 justify-start w-full text-sm hover:bg-accent p-2 rounded',
+        isActive && 'bg-accent rounded'
+      )}
     >
       {icon && icon}
       {label}
@@ -53,8 +63,9 @@ export default function Navigation() {
   const isTablet = useIsTablet();
   const [isMounted, setIsMounted] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
 
-  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     setIsMounted(true);
@@ -75,14 +86,18 @@ export default function Navigation() {
 
   if (isTablet) {
     return (
-      <Sheet>
-        <SheetTrigger className="cursor-pointer hover:text-primary">
-          <Menu className="size-4" />
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger className="cursor-pointer hover:text-primary" asChild>
+          <Button variant="ghost" size="icon">
+            <Menu />
+          </Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
             <SheetTitle>
-              <Logo />
+              <Link href="/" onClick={() => setOpen(false)}>
+                <Logo />
+              </Link>
             </SheetTitle>
           </SheetHeader>
 
@@ -90,11 +105,20 @@ export default function Navigation() {
             <nav className="px-4 text-sm">
               <ul>
                 {sheetNavigationItems.map((item) => (
-                  <li key={item.label} className="mb-2">
+                  <li
+                    key={item.label}
+                    className={cn(
+                      'mb-2',
+                      pathname === item.href && 'bg-accent rounded'
+                    )}
+                  >
                     {item.subItems ? (
                       <>
                         <button
-                          className="flex items-center justify-between w-full cursor-pointer hover:bg-accent p-2 rounded"
+                          className={cn(
+                            'flex items-center justify-between w-full cursor-pointer hover:bg-accent p-2 rounded',
+                            pathname === item.href && 'bg-accent rounded'
+                          )}
                           onClick={() => toggleExpanded(item.label)}
                         >
                           <div className="flex items-center gap-2">
@@ -115,7 +139,11 @@ export default function Navigation() {
                                 {subItem.subItems ? (
                                   <>
                                     <button
-                                      className="cursor-pointer w-full justify-start h-auto p-2 font-normal text-sm hover:bg-accent rounded"
+                                      className={cn(
+                                        'cursor-pointer w-full justify-start h-auto p-2 font-normal text-sm hover:bg-accent rounded',
+                                        pathname === subItem.href &&
+                                          'bg-accent rounded'
+                                      )}
                                       onClick={() =>
                                         toggleExpanded(
                                           subItem.label,
@@ -146,7 +174,11 @@ export default function Navigation() {
                                           <li key={nestedItem.label}>
                                             <Link
                                               href={nestedItem.href}
-                                              className="flex items-center gap-2 p-2 rounded hover:bg-accent text-sm"
+                                              className={cn(
+                                                'flex items-center gap-2 p-2 rounded hover:bg-accent text-sm',
+                                                pathname === nestedItem.href &&
+                                                  'bg-accent rounded'
+                                              )}
                                             >
                                               <span>{nestedItem.label}</span>
                                             </Link>
@@ -158,7 +190,12 @@ export default function Navigation() {
                                 ) : (
                                   <Link
                                     href={subItem.href}
-                                    className="flex items-center gap-2 p-2 rounded hover:bg-accent text-sm"
+                                    className={cn(
+                                      'flex items-center gap-2 p-2 rounded hover:bg-accent text-sm',
+                                      pathname === subItem.href &&
+                                        'bg-accent rounded'
+                                    )}
+                                    onClick={() => setOpen(false)}
                                   >
                                     <subItem.icon className="size-4" />
                                     <span>{subItem.label}</span>
@@ -172,7 +209,10 @@ export default function Navigation() {
                     ) : (
                       <Link
                         href={item.href}
-                        className="flex items-center gap-2 p-2 rounded hover:bg-accent"
+                        className={cn(
+                          'flex items-center gap-2 p-2 rounded hover:bg-accent',
+                          pathname === item.href && 'bg-accent rounded'
+                        )}
                       >
                         <item.icon className="size-4" />
                         {item.label}
@@ -200,6 +240,7 @@ export default function Navigation() {
                   href={item.href}
                   label={item.label}
                   icon={<item.icon className="size-4" />}
+                  isActive={pathname === item.href}
                 />
               ))}
             </ul>
@@ -215,6 +256,7 @@ export default function Navigation() {
                   href={item.href}
                   label={item.label}
                   icon={<item.icon className="size-4" />}
+                  isActive={pathname === item.href}
                 />
               ))}
             </ul>
@@ -222,27 +264,55 @@ export default function Navigation() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href="/">Recruitment</Link>
+            <Link
+              href="/recruitment"
+              className={cn(
+                linkClassName,
+                pathname === '/recruitment' && 'bg-accent'
+              )}
+            >
+              Recruitment
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild>
+            <Link
+              href="/fields"
+              className={cn(
+                linkClassName,
+                pathname === '/fields' && 'bg-accent'
+              )}
+            >
+              Fields
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href="/">Recruitment</Link>
+            <Link
+              href="/referees"
+              className={cn(
+                linkClassName,
+                pathname === '/referees' && 'bg-accent'
+              )}
+            >
+              Referees
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href="/">Fields</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/">Referees</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/">About</Link>
+            <Link
+              href="/about"
+              className={cn(
+                linkClassName,
+                pathname === '/about' && 'bg-accent'
+              )}
+            >
+              About
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
