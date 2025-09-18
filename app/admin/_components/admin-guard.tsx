@@ -4,11 +4,7 @@ import { CustomSignInButton } from '@/components/custom-sign-in-button';
 
 import { Authenticated, Unauthenticated } from 'convex/react';
 
-export default function AdminGuard({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function AdminGuard({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Authenticated>{children}</Authenticated>

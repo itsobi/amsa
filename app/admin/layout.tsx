@@ -1,4 +1,4 @@
-import AdminGuard from './_components/admin-guard';
+import { AdminGuard } from './_components/admin-guard';
 
 export default function AdminLayout({
   children,
