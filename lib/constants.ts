@@ -1,9 +1,3 @@
-export const ADMIN_EMAILS = [
-  'obi.j.obialo@gmail.com',
-  'admin@example.com',
-  'admin2@example.com',
-];
-
 export const SEASONS = [
   'Fall 2025',
   'Summer 2025',

@@ -29,7 +29,7 @@ import { Loader } from 'lucide-react';
 import Link from 'next/link';
 import { isClerkAPIResponseError } from '@clerk/nextjs/errors';
 import { toast } from 'sonner';
-import { ADMIN_EMAILS } from '@/lib/constants';
+import { ADMIN_EMAILS } from '@/emails';
 
 const signInFormSchema = z.object({
   email: z.email({
