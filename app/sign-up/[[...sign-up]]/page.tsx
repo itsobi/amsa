@@ -36,6 +36,7 @@ import { toast } from 'sonner';
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from 'input-otp';
 import { isClerkAPIResponseError } from '@clerk/nextjs/errors';
 import { Loader } from 'lucide-react';
+import { ADMIN_EMAILS } from '@/lib/constants';
 
 const signUpFormSchema = z.object({
   email: z.email({
@@ -64,9 +65,13 @@ export default function Page() {
   });
 
   const onSubmit = async (data: z.infer<typeof signUpFormSchema>) => {
-    // TODO: check for non admin emails
     if (!isLoaded) {
       toast.error('Client it not loaded, please try again.');
+      return;
+    }
+
+    if (!ADMIN_EMAILS.includes(data.email)) {
+      toast.error('Sorry, this feature is only available to AMSA admins.');
       return;
     }
 

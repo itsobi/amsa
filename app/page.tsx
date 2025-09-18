@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
+
 import Link from 'next/link';
 
 export default function Home() {
@@ -137,10 +138,7 @@ export default function Home() {
               </p>
             </CardContent>
           </Card>
-        </div>
-
-        <div className="flex flex-col gap-4 lg:flex-row justify-center items-center mt-6">
-          <Card className="h-fit w-full lg:w-fit">
+          <Card>
             <CardContent>
               <h4 className="text-lg font-semibold mb-2 tracking-wide">
                 Follow & Connect
@@ -170,7 +168,7 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <Card className="h-fit w-full lg:w-fit">
+          <Card>
             <CardContent>
               <h4 className="text-lg font-semibold mb-2 tracking-wide">
                 Have any questions?

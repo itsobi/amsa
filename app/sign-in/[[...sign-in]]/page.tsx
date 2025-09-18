@@ -29,6 +29,7 @@ import { Loader } from 'lucide-react';
 import Link from 'next/link';
 import { isClerkAPIResponseError } from '@clerk/nextjs/errors';
 import { toast } from 'sonner';
+import { ADMIN_EMAILS } from '@/lib/constants';
 
 const signInFormSchema = z.object({
   email: z.email({
@@ -56,6 +57,11 @@ export default function SignInForm() {
   const onSubmit = async (data: z.infer<typeof signInFormSchema>) => {
     if (!isLoaded) return;
 
+    if (!ADMIN_EMAILS.includes(data.email)) {
+      toast.error('Sorry, this feature is only available to AMSA admins.');
+      return;
+    }
+
     // Start the sign-in process using the email and password provided
     try {
       setFormIsLoading(true);
@@ -71,11 +77,13 @@ export default function SignInForm() {
           session: signInAttempt.createdSessionId,
         });
         toast.success('Signed in successfully');
-        router.replace('/');
+        router.replace('/admin');
       } else {
         // If the status is not complete, check why. User may need to
         // complete further steps.
         console.error(JSON.stringify(signInAttempt, null, 2));
+        toast.error('An error occurred while signing in');
+        return;
       }
     } catch (err: any) {
       console.error(JSON.stringify(err, null, 2));

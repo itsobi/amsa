@@ -1,10 +1,13 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+import { NextResponse } from 'next/server';
 
-const isPrivateRoute = createRouteMatcher(['/update-results(.*)']);
+const isPrivateRoute = createRouteMatcher(['/admin/update-results(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isPrivateRoute(req)) {
-    await auth.protect();
+  const { isAuthenticated } = await auth();
+  if (isPrivateRoute(req) && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/sign-in', req.url));
   }
 });
 

@@ -93,7 +93,7 @@ export default function Navigation() {
           </Button>
         </SheetTrigger>
         <SheetContent>
-          <SheetHeader>
+          <SheetHeader className="w-fit">
             <SheetTitle>
               <Link href="/" onClick={() => setOpen(false)}>
                 <Logo />

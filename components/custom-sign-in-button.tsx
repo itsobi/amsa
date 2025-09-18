@@ -65,24 +65,24 @@ export function CustomSignInButton({ buttonLabel, buttonIcon }: Props) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
         <Button variant="outline">
           {buttonIcon && buttonIcon}
           {buttonLabel && buttonLabel}
         </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>AMSA Admins Only</DialogTitle>
-          <DialogDescription>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>AMSA Admins Only</AlertDialogTitle>
+          <AlertDialogDescription>
             This action is only available to AMSA admins. If your are not an
             AMSA admin, your account will be terminated.
-          </DialogDescription>
-        </DialogHeader>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
 
         <div className="flex flex-col gap-4">
-          <Button
+          {/* <Button
             variant="outline"
             onClick={handleGoogleSignIn}
             className="w-full"
@@ -95,13 +95,12 @@ export function CustomSignInButton({ buttonLabel, buttonIcon }: Props) {
               className="size-4"
             />
             <span>Continue with Google</span>
-          </Button>
+          </Button> */}
           <Button
             onClick={() => {
               setOpen(false);
               router.push('/sign-in');
             }}
-            variant="outline"
             className="w-full"
           >
             <Mail className="size-4" />
@@ -115,7 +114,7 @@ export function CustomSignInButton({ buttonLabel, buttonIcon }: Props) {
             Cancel
           </Button>
         </div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
