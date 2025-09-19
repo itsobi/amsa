@@ -13,6 +13,15 @@ import { api } from '@/convex/_generated/api';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 import { Id } from '@/convex/_generated/dataModel';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { convertDate, convertTime } from '@/lib/helpers';
 
 export function SchedulesView() {
   const router = useRouter();
@@ -32,6 +41,15 @@ export function SchedulesView() {
   });
 
   console.log(schedule);
+
+  const selectedSeason =
+    seasons?.find((s) => s._id === season)?.season ?? 'Fall 2025';
+  const selectedDivision =
+    divisions?.find((d) => d._id === division)?.division ?? 'Premier';
+
+  const getDivision = (division: Id<'divisions'>) => {
+    return divisions?.find((d) => d._id === division)?.division ?? 'Premier';
+  };
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -81,6 +99,50 @@ export function SchedulesView() {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="mt-10">
+        <h4>
+          {selectedSeason} - {selectedDivision}
+        </h4>
+
+        <div className="flex flex-col gap-4 mt-5">
+          {Object.entries(schedule ?? {}).map(([date, matches], index) => (
+            <>
+              <p className="text-lg font-bold">
+                Week {index + 1} - {convertDate(date)}
+              </p>
+              <Table key={date}>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Time</TableHead>
+                    <TableHead>Division</TableHead>
+                    <TableHead className="w-[200px]">Home</TableHead>
+                    <TableHead>Result</TableHead>
+                    <TableHead className="w-[200px]">Visitor</TableHead>
+                    <TableHead>Venue</TableHead>
+                    <TableHead>Type</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {matches.map((match) => (
+                    <TableRow key={match._id}>
+                      <TableCell>{convertTime(match.time)}</TableCell>
+                      <TableCell>{getDivision(match.division)}</TableCell>
+                      <TableCell>{match.homeTeam}</TableCell>
+                      <TableCell>
+                        {match.homeTeamScore} - {match.awayTeamScore}
+                      </TableCell>
+                      <TableCell>{match.awayTeam}</TableCell>
+                      <TableCell>{match.venue}</TableCell>
+                      <TableCell>{match.type}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          ))}
+        </div>
       </div>
     </div>
   );

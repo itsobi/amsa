@@ -7,11 +7,21 @@ export const getSchedule = query({
     division: v.id('divisions'),
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const matches = await ctx.db
       .query('matches')
       .withIndex('by_season_division', (q) =>
         q.eq('season', args.season).eq('division', args.division)
       )
       .collect();
+
+    const groupedMatches = matches.reduce((acc, match) => {
+      if (!acc[match.date]) {
+        acc[match.date] = [];
+      }
+      acc[match.date].push(match);
+      return acc;
+    }, {} as Record<string, typeof matches>);
+
+    return groupedMatches;
   },
 });
