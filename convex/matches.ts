@@ -26,7 +26,7 @@ export const createMatches = mutation({
         message: 'Unauthorized',
       };
     }
-    const result = await Promise.all(
+    await Promise.all(
       args.matches.map((match) => ctx.db.insert('matches', match))
     );
     return {

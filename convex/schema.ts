@@ -3,7 +3,10 @@ import { v } from 'convex/values';
 
 export default defineSchema({
   seasons: defineTable({
-    season: v.string(),
+    season: v.string(), // for half fall/summer/spring schedules
+  }),
+  fullSeasons: defineTable({
+    season: v.string(), // for full season standings
   }),
   divisions: defineTable({
     division: v.string(),
@@ -19,5 +22,22 @@ export default defineSchema({
     venue: v.string(),
     type: v.string(),
     time: v.string(), // HH:MM
+  }).index('by_season_division', ['season', 'division']),
+  standings: defineTable({
+    season: v.id('fullSeasons'),
+    division: v.id('divisions'),
+    team: v.string(),
+    teamCaptain: v.string(),
+    color1: v.optional(v.string()),
+    color2: v.optional(v.string()),
+    gamesPlayed: v.number(),
+    gamesWon: v.number(),
+    gamesDrawn: v.number(),
+    gamesLost: v.number(),
+    goalsScored: v.number(),
+    goalsAgainst: v.number(),
+    goalDifference: v.number(),
+    points: v.number(),
+    tablePosition: v.optional(v.number()),
   }).index('by_season_division', ['season', 'division']),
 });

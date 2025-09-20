@@ -22,6 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { convertDate, convertTime } from '@/lib/helpers';
+import { LoadingScreen } from '@/components/loading-screen';
 
 export function SchedulesView() {
   const router = useRouter();
@@ -39,8 +40,6 @@ export function SchedulesView() {
     season: season as Id<'seasons'>,
     division: division as Id<'divisions'>,
   });
-
-  console.log(schedule);
 
   const selectedSeason =
     seasons?.find((s) => s._id === season)?.season ?? 'Fall 2025';
@@ -61,17 +60,21 @@ export function SchedulesView() {
     [searchParams]
   );
 
+  if (schedule === undefined) {
+    return <LoadingScreen />;
+  }
+
   return (
     <div>
       <PageHeading title="Schedules" />
       <div className="flex items-center justify-between">
         <Select
-          defaultValue="Fall 2025"
+          defaultValue={selectedSeason}
           onValueChange={(string) =>
             router.push(`${pathname}?${createQueryString('season', string)}`)
           }
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Season" />
           </SelectTrigger>
           <SelectContent>
@@ -83,12 +86,12 @@ export function SchedulesView() {
           </SelectContent>
         </Select>
         <Select
-          defaultValue="j571ej091962d8vs3wkks9qc957qp1hc" // Premier ID
+          defaultValue={division}
           onValueChange={(string) =>
             router.push(`${pathname}?${createQueryString('division', string)}`)
           }
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[200px]">
             <SelectValue placeholder="Division" />
           </SelectTrigger>
           <SelectContent>
