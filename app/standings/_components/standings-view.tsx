@@ -127,7 +127,7 @@ export function StandingsView() {
           )}
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="hover:bg-transparent">
                 <TableHead>Team Name</TableHead>
                 <TableHead>Team Captain</TableHead>
                 <TableHead>Colors</TableHead>
@@ -143,7 +143,7 @@ export function StandingsView() {
             </TableHeader>
             <TableBody>
               {standings.map((standing) => (
-                <TableRow key={standing._id}>
+                <TableRow key={standing._id} className="hover:bg-transparent">
                   <TableCell>{standing.team}</TableCell>
                   <TableCell>{standing.teamCaptain}</TableCell>
                   <TableCell>
@@ -159,7 +159,7 @@ export function StandingsView() {
                   <TableCell>{standing.goalsScored}</TableCell>
                   <TableCell>{standing.goalsAgainst}</TableCell>
                   <TableCell>{standing.goalDifference}</TableCell>
-                  <TableCell>{standing.points}</TableCell>
+                  <TableCell className="font-bold">{standing.points}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

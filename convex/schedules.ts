@@ -25,3 +25,24 @@ export const getSchedule = query({
     return groupedMatches;
   },
 });
+
+export const getTeamSchedule = query({
+  args: {
+    teamName: v.string(),
+    season: v.id('seasons'),
+  },
+  handler: async (ctx, args) => {
+    const matches = await ctx.db
+      .query('matches')
+      .withIndex('by_season_division', (q) => q.eq('season', args.season))
+      .filter((q) =>
+        q.or(
+          q.eq(q.field('homeTeam'), args.teamName),
+          q.eq(q.field('awayTeam'), args.teamName)
+        )
+      )
+      .collect();
+
+    return matches;
+  },
+});

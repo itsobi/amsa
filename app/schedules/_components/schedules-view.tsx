@@ -65,7 +65,7 @@ export function SchedulesView() {
   }
 
   return (
-    <div>
+    <div className="mb-5">
       <PageHeading title="Schedules" />
       <div className="flex items-center justify-between">
         <Select
@@ -109,15 +109,15 @@ export function SchedulesView() {
           {selectedSeason} - {selectedDivision}
         </h4>
 
-        <div className="flex flex-col gap-4 mt-5">
+        <div className="flex flex-col gap-10 mt-5">
           {Object.entries(schedule ?? {}).map(([date, matches], index) => (
-            <>
-              <p className="text-lg font-bold">
+            <div key={date}>
+              <p className="text-lg font-bold mb-2.5">
                 Week {index + 1} - {convertDate(date)}
               </p>
-              <Table key={date}>
+              <Table>
                 <TableHeader>
-                  <TableRow>
+                  <TableRow className="hover:bg-transparent">
                     <TableHead>Time</TableHead>
                     <TableHead>Division</TableHead>
                     <TableHead className="w-[200px]">Home</TableHead>
@@ -129,21 +129,35 @@ export function SchedulesView() {
                 </TableHeader>
                 <TableBody>
                   {matches.map((match) => (
-                    <TableRow key={match._id}>
+                    <TableRow key={match._id} className="hover:bg-transparent">
                       <TableCell>{convertTime(match.time)}</TableCell>
                       <TableCell>{getDivision(match.division)}</TableCell>
-                      <TableCell>{match.homeTeam}</TableCell>
+                      <TableCell
+                        className="cursor-pointer hover:text-blue-500 hover:underline"
+                        onClick={() =>
+                          router.push(`/schedules/${match.homeTeam}`)
+                        }
+                      >
+                        {match.homeTeam}
+                      </TableCell>
                       <TableCell>
                         {match.homeTeamScore} - {match.awayTeamScore}
                       </TableCell>
-                      <TableCell>{match.awayTeam}</TableCell>
+                      <TableCell
+                        className="cursor-pointer hover:text-blue-500 hover:underline"
+                        onClick={() =>
+                          router.push(`/schedules/${match.awayTeam}`)
+                        }
+                      >
+                        {match.awayTeam}
+                      </TableCell>
                       <TableCell>{match.venue}</TableCell>
                       <TableCell>{match.type}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
-            </>
+            </div>
           ))}
         </div>
       </div>
