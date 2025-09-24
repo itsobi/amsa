@@ -9,5 +9,5 @@ p.s. I actually happen to play in this league, and got tired of the experience w
 - NextJS - React framework that allows server side rendering/API routes out of the box
 - TypeScript - Type safety
 - TailwindCSS - Utility first CSS framework
-- Clerk - Authentication to allow AMSA admins to update schedules/standings
+- Better Auth - Auth framework to allow AMSA admins to update schedules/standings
 - Convex - Real Time Database
