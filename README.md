@@ -2,7 +2,7 @@
 
 A modern, sleek, rewrite of [Austin Men's Soccer Association Website.](https://austinmenssoccer.com/)
 
-p.s. I actually happen to play in this league, and got tired of the experience when I would check the gametimes/scores. So I decided to rewrite the website myself, lol 🤷🏾.
+p.s. I actually happen to play in this league, and got tired of the experience when I would check the game times/scores, so I decided to rewrite the website myself. Cheers 🍻.
 
 ## Tech Stack
 
