@@ -181,11 +181,12 @@ export default function RegisterPage() {
           onClick={() => router.replace('/')}
           className="w-full"
           type="button"
+          disabled={formIsLoading}
         >
           Cancel
         </Button>
 
-        <div className="mt-4 text-center">
+        <div className="mt-4 text-center space-y-4">
           <p className="text-sm text-muted-foreground">
             Already have an account?{' '}
             <Link
@@ -195,8 +196,14 @@ export default function RegisterPage() {
               Sign in
             </Link>
           </p>
+
+          <Link
+            href="/forgot-password"
+            className="text-primary text-sm font-semibold hover:underline"
+          >
+            Forgot password?
+          </Link>
         </div>
-        <div id="clerk-captcha" />
       </AlertDialogContent>
     </AlertDialog>
   );

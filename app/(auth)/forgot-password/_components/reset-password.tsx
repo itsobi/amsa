@@ -1,14 +1,6 @@
 'use client';
 
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-
-import {
   Form,
   FormField,
   FormItem,
@@ -17,19 +9,26 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { useRouter } from 'next/navigation';
-import { z } from 'zod';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
-import Link from 'next/link';
-import { toast } from 'sonner';
-import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
-const signInFormSchema = z.object({
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { authClient } from '@/lib/auth-client';
+import { toast } from 'sonner';
+
+const resetPasswordFormSchema = z.object({
   email: z.email({
     message: 'Email must be a valid email address.',
   }),
@@ -38,37 +37,42 @@ const signInFormSchema = z.object({
   }),
 });
 
-export default function SignInPage() {
-  const [formIsLoading, setFormIsLoading] = useState(false);
-
+export function ResetPassword({ token }: { token: string }) {
   const router = useRouter();
-
-  const form = useForm<z.infer<typeof signInFormSchema>>({
-    resolver: zodResolver(signInFormSchema),
+  const [formIsLoading, setFormIsLoading] = useState(false);
+  const form = useForm<z.infer<typeof resetPasswordFormSchema>>({
+    resolver: zodResolver(resetPasswordFormSchema),
     defaultValues: {
-      email: '',
       password: '',
     },
   });
 
-  const onSubmit = async (formData: z.infer<typeof signInFormSchema>) => {
+  const onSubmit = async (
+    formData: z.infer<typeof resetPasswordFormSchema>
+  ) => {
     setFormIsLoading(true);
-    const { data, error } = await authClient.signIn.email({
-      email: formData.email,
-      password: formData.password,
+    const { error } = await authClient.resetPassword({
+      newPassword: formData.password,
+      token,
     });
 
     if (error) {
       setFormIsLoading(false);
-      if (error.status === 403) {
-        toast.error('Please verify your email to continue.');
-        return;
-      }
       toast.error(error.message);
-    } else if (data) {
-      setFormIsLoading(false);
-      toast.success('Signed in successfully');
-      router.replace('/admin');
+    } else {
+      const { error } = await authClient.signIn.email({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (error) {
+        setFormIsLoading(false);
+        toast.error(error.message);
+      } else {
+        setFormIsLoading(false);
+        toast.success('Password reset successfully');
+        router.replace('/admin');
+      }
     }
   };
 
@@ -76,9 +80,9 @@ export default function SignInPage() {
     <AlertDialog open={true}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Sign In</AlertDialogTitle>
+          <AlertDialogTitle>Reset Password</AlertDialogTitle>
           <AlertDialogDescription>
-            Welcome back! Please enter your email and password to continue.
+            Enter your email and your new password to reset your account.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -110,10 +114,10 @@ export default function SignInPage() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
-                      type="password"
                       className="text-sm"
                       {...field}
                       placeholder="********"
+                      type="password"
                     />
                   </FormControl>
 
@@ -121,6 +125,7 @@ export default function SignInPage() {
                 </FormItem>
               )}
             />
+
             <div className="mt-8 space-y-4">
               <Button
                 className="w-full"
@@ -130,7 +135,7 @@ export default function SignInPage() {
                 {formIsLoading ? (
                   <Loader className="size-4 animate-spin" />
                 ) : (
-                  'Sign In'
+                  'Reset Password'
                 )}
               </Button>
               <Button
@@ -145,24 +150,6 @@ export default function SignInPage() {
             </div>
           </form>
         </Form>
-
-        <div className="mt-4 text-center space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link
-              href="/register"
-              className="text-primary font-semibold hover:underline"
-            >
-              Register
-            </Link>
-          </p>
-          <Link
-            href="/forgot-password"
-            className="text-primary text-sm font-semibold hover:underline"
-          >
-            Forgot password?
-          </Link>
-        </div>
       </AlertDialogContent>
     </AlertDialog>
   );

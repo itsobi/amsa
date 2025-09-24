@@ -5,7 +5,7 @@ import { DataModel } from './_generated/dataModel';
 import { query } from './_generated/server';
 import { betterAuth } from 'better-auth';
 import { requireActionCtx } from '@convex-dev/better-auth/utils';
-import { sendEmailVerification } from './email';
+import { sendEmailVerificationEmail, sendResetPasswordEmail } from './email';
 
 const siteUrl = process.env.SITE_URL!;
 
@@ -27,7 +27,7 @@ export const createAuth = (
     database: authComponent.adapter(ctx),
     emailVerification: {
       sendVerificationEmail: async ({ user, url }) => {
-        await sendEmailVerification(requireActionCtx(ctx), {
+        await sendEmailVerificationEmail(requireActionCtx(ctx), {
           to: user.email,
           url,
         });
@@ -38,6 +38,12 @@ export const createAuth = (
       enabled: true,
       requireEmailVerification: true,
       autoSignIn: false,
+      sendResetPassword: async ({ user, url }) => {
+        await sendResetPasswordEmail(requireActionCtx(ctx), {
+          to: user.email,
+          url,
+        });
+      },
     },
     plugins: [
       // The Convex plugin is required for Convex compatibility
