@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
@@ -29,10 +29,6 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 
-const callbackURL = process.env.NEXT_PUBLIC_SITE_URL
-  ? `${process.env.NEXT_PUBLIC_SITE_URL}/admin`
-  : 'http://localhost:3000/admin';
-
 const signInFormSchema = z.object({
   email: z.email({
     message: 'Email must be a valid email address.',
@@ -43,10 +39,6 @@ const signInFormSchema = z.object({
 });
 
 export default function SignInPage() {
-  const searchParams = useSearchParams();
-  const errorParam = searchParams.get('error');
-
-  console.log(errorParam);
   const [formIsLoading, setFormIsLoading] = useState(false);
 
   const router = useRouter();
@@ -79,23 +71,6 @@ export default function SignInPage() {
       router.replace('/admin');
     }
   };
-
-  if (errorParam === 'invalid_token') {
-    return (
-      <AlertDialog open={true}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Invalid Token</AlertDialogTitle>
-            <AlertDialogDescription>
-              Sorry, email verification was unsuccessful. Please register for an
-              account to continue.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <Button onClick={() => router.replace('/register')}>Continue</Button>
-        </AlertDialogContent>
-      </AlertDialog>
-    );
-  }
 
   return (
     <AlertDialog open={true}>
