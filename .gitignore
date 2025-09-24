@@ -42,3 +42,6 @@ next-env.d.ts
 
 # emails
 emails.ts
+
+# clerk configuration (can include secrets)
+/.clerk/

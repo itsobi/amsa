@@ -2,32 +2,16 @@
 
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { isClerkAPIResponseError } from '@clerk/nextjs/errors';
 
-import { useSignIn } from '@clerk/nextjs';
 import { Button } from './ui/button';
-import { toast } from 'sonner';
-import { Loader2, Mail } from 'lucide-react';
-import Image from 'next/image';
+
+import { Mail } from 'lucide-react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -37,32 +21,8 @@ interface Props {
 }
 
 export function CustomSignInButton({ buttonLabel, buttonIcon }: Props) {
-  const { signIn } = useSignIn();
   const [open, setOpen] = useState(false);
   const router = useRouter();
-
-  if (!signIn) return null;
-
-  const handleGoogleSignIn = async () => {
-    setOpen(false);
-    try {
-      return signIn.authenticateWithRedirect({
-        strategy: 'oauth_google',
-        redirectUrl: '/sign-in/sso-callback',
-        redirectUrlComplete: '/',
-      });
-    } catch (error) {
-      console.error(error);
-      const errorMessage = isClerkAPIResponseError(error)
-        ? error.errors[0].longMessage
-        : error instanceof Error
-        ? error.message
-        : 'An error occurred while signing in';
-      toast.error('Error signing in', {
-        description: errorMessage,
-      });
-    }
-  };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -82,24 +42,10 @@ export function CustomSignInButton({ buttonLabel, buttonIcon }: Props) {
         </AlertDialogHeader>
 
         <div className="flex flex-col gap-4">
-          {/* <Button
-            variant="outline"
-            onClick={handleGoogleSignIn}
-            className="w-full"
-          >
-            <Image
-              src="/images/google.png"
-              alt="Google"
-              width={24}
-              height={24}
-              className="size-4"
-            />
-            <span>Continue with Google</span>
-          </Button> */}
           <Button
             onClick={() => {
               setOpen(false);
-              router.push('/sign-in');
+              router.push('/register');
             }}
             className="w-full"
           >

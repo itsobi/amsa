@@ -17,8 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { useSignIn } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
@@ -27,9 +26,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
 import Link from 'next/link';
-import { isClerkAPIResponseError } from '@clerk/nextjs/errors';
 import { toast } from 'sonner';
-import { ADMIN_EMAILS } from '@/emails';
+import { authClient } from '@/lib/auth-client';
+
+const callbackURL = process.env.NEXT_PUBLIC_SITE_URL
+  ? `${process.env.NEXT_PUBLIC_SITE_URL}/admin`
+  : 'http://localhost:3000/admin';
 
 const signInFormSchema = z.object({
   email: z.email({
@@ -40,8 +42,11 @@ const signInFormSchema = z.object({
   }),
 });
 
-export default function SignInForm() {
-  const { isLoaded, signIn, setActive } = useSignIn();
+export default function SignInPage() {
+  const searchParams = useSearchParams();
+  const errorParam = searchParams.get('error');
+
+  console.log(errorParam);
   const [formIsLoading, setFormIsLoading] = useState(false);
 
   const router = useRouter();
@@ -54,52 +59,43 @@ export default function SignInForm() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof signInFormSchema>) => {
-    if (!isLoaded) return;
+  const onSubmit = async (formData: z.infer<typeof signInFormSchema>) => {
+    setFormIsLoading(true);
+    const { data, error } = await authClient.signIn.email({
+      email: formData.email,
+      password: formData.password,
+    });
 
-    if (!ADMIN_EMAILS.includes(data.email)) {
-      toast.error('Sorry, this feature is only available to AMSA admins.');
-      return;
-    }
-
-    // Start the sign-in process using the email and password provided
-    try {
-      setFormIsLoading(true);
-      const signInAttempt = await signIn.create({
-        identifier: data.email,
-        password: data.password,
-      });
-
-      // If sign-in process is complete, set the created session as active
-      // and redirect the user
-      if (signInAttempt.status === 'complete') {
-        await setActive({
-          session: signInAttempt.createdSessionId,
-        });
-        toast.success('Signed in successfully');
-        router.replace('/admin');
-      } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        console.error(JSON.stringify(signInAttempt, null, 2));
-        toast.error('An error occurred while signing in');
+    if (error) {
+      setFormIsLoading(false);
+      if (error.status === 403) {
+        toast.error('Please verify your email to continue.');
         return;
       }
-    } catch (err: any) {
-      console.error(JSON.stringify(err, null, 2));
-      if (isClerkAPIResponseError(err)) {
-        toast.error(err.errors[0].longMessage);
-      } else {
-        toast.error(
-          err instanceof Error
-            ? err.message
-            : 'An error occurred while signing in'
-        );
-      }
-    } finally {
+      toast.error(error.message);
+    } else if (data) {
       setFormIsLoading(false);
+      toast.success('Signed in successfully');
+      router.replace('/admin');
     }
   };
+
+  if (errorParam === 'invalid_token') {
+    return (
+      <AlertDialog open={true}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Invalid Token</AlertDialogTitle>
+            <AlertDialogDescription>
+              Sorry, email verification was unsuccessful. Please register for an
+              account to continue.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Button onClick={() => router.replace('/register')}>Continue</Button>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
+  }
 
   return (
     <AlertDialog open={true}>
@@ -107,8 +103,7 @@ export default function SignInForm() {
         <AlertDialogHeader>
           <AlertDialogTitle>Sign In</AlertDialogTitle>
           <AlertDialogDescription>
-            Welcome back! Please enter your email and password to sign in. All
-            accounts not associated with a AMSA will be terminated.
+            Welcome back! Please enter your email and password to continue.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -167,7 +162,7 @@ export default function SignInForm() {
                 variant="outline"
                 onClick={() => router.replace('/')}
                 className="w-full"
-                type="submit"
+                type="button"
               >
                 Cancel
               </Button>
@@ -179,10 +174,10 @@ export default function SignInForm() {
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
             <Link
-              href="/sign-up"
+              href="/register"
               className="text-primary font-semibold hover:underline"
             >
-              Sign up
+              Register
             </Link>
           </p>
         </div>

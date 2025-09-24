@@ -4,8 +4,7 @@ import './globals.css';
 import { Header } from '@/components/header/header';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { ClerkProvider } from '@clerk/nextjs';
-import ConvexClientProvider from '@/components/providers/convex-client-provider';
+import { ConvexClientProvider } from '@/components/providers/convex-client-provider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,30 +31,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClerkProvider
-          appearance={{
-            variables: {
-              fontFamily: 'var(--font-geist-sans)',
-            },
-          }}
-        >
-          <ConvexClientProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <div className="fixed top-0 left-0 right-0 z-50 bg-background shadow-xs">
-                <Header />
-              </div>
-              <main className="container mx-auto px-4 py-8 md:px-0 mt-[72px]">
-                {children}
-              </main>
-              <Toaster richColors />
-            </ThemeProvider>
-          </ConvexClientProvider>
-        </ClerkProvider>
+        <ConvexClientProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="fixed top-0 left-0 right-0 z-50 bg-background shadow-xs">
+              <Header />
+            </div>
+            <main className="container mx-auto px-4 py-8 md:px-0 mt-[72px]">
+              {children}
+            </main>
+            <Toaster richColors />
+          </ThemeProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );

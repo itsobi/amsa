@@ -5,16 +5,26 @@ import { ThemeToggle } from './theme-toggle';
 import { Logo } from './logo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserButton, useUser } from '@clerk/nextjs';
 import { CustomSignInButton } from '../custom-sign-in-button';
 import { LogIn } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { authClient } from '@/lib/auth-client';
+import { UserButton } from './user-button';
+import { LoadingScreen } from '../loading-screen';
+
+const user = true;
 
 export function Header() {
-  const { user } = useUser();
   const pathname = usePathname();
   const isAdmin = pathname.includes('/admin');
 
-  if (isAdmin) {
+  const user = authClient.useSession();
+
+  if (user.isPending) {
+    return <LoadingScreen />;
+  }
+
+  if (isAdmin && user.data?.user.id) {
     return (
       <div className="container mx-auto px-4 py-4 md:px-0 flex justify-between items-center">
         <Link href="/">
@@ -23,21 +33,7 @@ export function Header() {
 
         <div className="flex items-center gap-4">
           <Navigation />
-          {user ? (
-            <UserButton />
-          ) : (
-            <>
-              <div className="block md:hidden">
-                <CustomSignInButton buttonIcon={<LogIn className="size-4" />} />
-              </div>
-              <div className="hidden md:block">
-                <CustomSignInButton
-                  buttonIcon={<LogIn className="size-4" />}
-                  buttonLabel="Admin Login"
-                />
-              </div>
-            </>
-          )}
+          {user.data?.user.id && <UserButton user={user.data.user} />}
           <ThemeToggle />
         </div>
       </div>

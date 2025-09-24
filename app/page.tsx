@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
+import { authClient } from '@/lib/auth-client';
 
 import Link from 'next/link';
 

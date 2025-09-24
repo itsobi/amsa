@@ -6,7 +6,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-import { useAuth } from '@clerk/nextjs';
 import { Button } from './ui/button';
 import { SquarePen } from 'lucide-react';
 import Link from 'next/link';
@@ -17,12 +16,13 @@ interface Props {
   actionHref: string;
 }
 
+const user = true;
+
 export function AdminPageHeading({ title, actionHref, tooltipText }: Props) {
-  const { userId } = useAuth();
   return (
     <div className="flex items-center justify-between mb-10">
       <h1 className="text-4xl font-semibold">{title}</h1>
-      {userId && (
+      {user && (
         <Tooltip>
           <TooltipTrigger asChild>
             <Link href={actionHref}>
