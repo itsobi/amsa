@@ -1,7 +1,5 @@
+import { UpdateResultsView } from './_components/update-results-view';
+
 export default function UpdateResultsPage() {
-  return (
-    <div>
-      <p>Update Results</p>
-    </div>
-  );
+  return <UpdateResultsView />;
 }
