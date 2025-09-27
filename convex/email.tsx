@@ -1,9 +1,9 @@
-import { VerifyEmail } from '@/components/email/verify-email';
+import { VerifyEmail } from '@/components/email-templates/verify-email';
 import { ActionCtx } from './_generated/server';
 import { Resend } from 'resend';
 import { render } from '@react-email/components';
 import { toast } from 'sonner';
-import { ResetPassword } from '@/components/email/reset-password';
+import { ResetPassword } from '@/components/email-templates/reset-password';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
