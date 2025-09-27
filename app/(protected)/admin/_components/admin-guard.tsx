@@ -9,8 +9,8 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
     <>
       <Authenticated>{children}</Authenticated>
       <Unauthenticated>
-        <div className="flex items-center justify-center text-center">
-          <div className="flex flex-col items-center justify-center gap-4 pt-20">
+        <div className="flex items-center justify-center text-center min-h-screen fixed inset-0 px-4">
+          <div className="flex flex-col items-center justify-center gap-4">
             <span className="text-6xl">🚫</span>
             <h1 className="text-2xl font-bold">
               Sorry, you are not authorized to access this page.
