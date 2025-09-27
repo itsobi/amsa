@@ -22,7 +22,7 @@ import { Logo } from './logo';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { ChevronDown, ChevronRight, Menu } from 'lucide-react';
+import { ChevronDown, ChevronRight, Menu, ShieldUser } from 'lucide-react';
 import {
   AMSAPoliciesNavigationItems,
   leagueNavigationItems,
@@ -30,6 +30,7 @@ import {
 } from '@/lib/routes';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
+import { authClient } from '@/lib/auth-client';
 
 const linkClassName =
   'group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50';
@@ -64,6 +65,7 @@ export default function Navigation() {
   const [isMounted, setIsMounted] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
+  const user = authClient.useSession();
 
   const pathname = usePathname();
 
@@ -222,6 +224,21 @@ export default function Navigation() {
                 ))}
               </ul>
             </nav>
+            {user.data?.user.id && (
+              <div className="px-4 pb-4">
+                <Link
+                  href="/admin"
+                  className={cn(
+                    'flex items-center gap-2 p-2 rounded hover:bg-accent w-full',
+                    pathname === '/admin' && 'bg-accent'
+                  )}
+                  onClick={() => setOpen(false)}
+                >
+                  <ShieldUser className="size-4" />
+                  <span>Admin</span>
+                </Link>
+              </div>
+            )}
           </div>
         </SheetContent>
       </Sheet>
@@ -315,6 +332,21 @@ export default function Navigation() {
             </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
+        {user.data?.user.id && (
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link
+                href="/admin"
+                className={cn(
+                  linkClassName,
+                  pathname === '/admin' && 'bg-accent'
+                )}
+              >
+                Admin
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        )}
       </NavigationMenuList>
     </NavigationMenu>
   );

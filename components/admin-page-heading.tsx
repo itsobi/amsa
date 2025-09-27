@@ -1,38 +1,16 @@
-'use client';
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-
-import { Button } from './ui/button';
-import { SquarePen } from 'lucide-react';
-import Link from 'next/link';
-
 interface Props {
   title: string;
-  tooltipText: string;
-  actionHref: string;
+  description?: string;
 }
 
-const user = true;
-
-export function AdminPageHeading({ title, actionHref, tooltipText }: Props) {
+export function AdminPageHeading({ title, description }: Props) {
   return (
-    <div className="flex items-center justify-between mb-10">
-      <h1 className="text-4xl font-semibold">{title}</h1>
-      {user && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link href={actionHref}>
-              <Button variant="outline">
-                <SquarePen className="size-4" />
-              </Button>
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent>{tooltipText}</TooltipContent>
-        </Tooltip>
+    <div className="mb-10 space-y-2">
+      <h1 className="text-2xl md:text-4xl font-semibold">{title}</h1>
+      {description && (
+        <p className="text-muted-foreground text-sm md:text-base">
+          {description}
+        </p>
       )}
     </div>
   );

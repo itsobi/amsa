@@ -1,11 +1,17 @@
-import { Button } from './ui/button';
-import { SquarePen } from 'lucide-react';
-import Link from 'next/link';
-
 interface Props {
   title: string;
+  description?: string;
 }
 
-export function PageHeading({ title }: Props) {
-  return <h1 className="text-4xl font-semibold mb-10">{title}</h1>;
+export function PageHeading({ title, description }: Props) {
+  return (
+    <div className="mb-10 space-y-2">
+      <h1 className="text-2xl md:text-4xl font-semibold">{title}</h1>
+      {description && (
+        <p className="text-muted-foreground text-sm md:text-base">
+          {description}
+        </p>
+      )}
+    </div>
+  );
 }
