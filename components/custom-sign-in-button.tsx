@@ -45,7 +45,7 @@ export function CustomSignInButton({ buttonLabel, buttonIcon }: Props) {
           <Button
             onClick={() => {
               setOpen(false);
-              router.push('/register');
+              router.push('/sign-in');
             }}
             className="w-full"
           >
