@@ -25,6 +25,9 @@ import { Id } from '@/convex/_generated/dataModel';
 import { useCallback } from 'react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { TeamColors } from './team-colors';
+import { Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export function StandingsView() {
   const router = useRouter();
@@ -115,7 +118,15 @@ export function StandingsView() {
       </div>
 
       <div className="mt-10">
-        <h4>{getDivision(division as Id<'divisions'>)}</h4>
+        <div className="flex items-center justify-between">
+          <h4>{getDivision(division as Id<'divisions'>)}</h4>
+          <Link href="/admin/update-standings">
+            <Button variant="outline">
+              <Pencil className="size-4" />
+              Update Standings
+            </Button>
+          </Link>
+        </div>
 
         <div className="my-5">
           {isOver50 && (

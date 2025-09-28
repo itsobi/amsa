@@ -60,7 +60,7 @@ export function UpdateResultsView() {
 
   return (
     <div className="mb-5">
-      <PageHeading title="Schedules" />
+      <PageHeading title="Schedules (Admin)" />
       <div className="flex items-center justify-between">
         <Select
           defaultValue={selectedSeason}
@@ -99,11 +99,8 @@ export function UpdateResultsView() {
       </div>
 
       <div className="mt-8">
-        <h4 className="mb-8">
-          {selectedSeason} - {selectedDivision}
-          <p className="text-sm text-muted-foreground">
-            *To update match result, click on the pencil icon*
-          </p>
+        <h4 className="mb-8 text-center text-sm text-muted-foreground">
+          *To update match result, click on the pencil icon*
         </h4>
         {Object.entries(schedule ?? {}).map(([date, matches], index) => (
           <div key={date} className="mb-8">

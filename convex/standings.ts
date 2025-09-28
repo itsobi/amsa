@@ -47,11 +47,50 @@ export const getStandings = query({
     division: v.id('divisions'),
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const standings = await ctx.db
       .query('standings')
       .withIndex('by_season_division', (q) =>
         q.eq('season', args.fullSeason).eq('division', args.division)
       )
       .collect();
+
+    const sortedStandings = standings.sort((a, b) => {
+      if (!a.tablePosition) return 1;
+      if (!b.tablePosition) return -1;
+      return a.tablePosition - b.tablePosition;
+    });
+
+    return sortedStandings;
+  },
+});
+
+export const updateStandings = mutation({
+  args: {
+    tableUpdates: v.array(
+      v.object({
+        id: v.id('standings'),
+        tablePosition: v.number(),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    try {
+      Promise.all(
+        args.tableUpdates.map((update) =>
+          ctx.db.patch(update.id, { tablePosition: update.tablePosition })
+        )
+      );
+      return {
+        success: true,
+        message: 'Standings updated successfully',
+      };
+    } catch (error) {
+      console.error('Error updating standings:', error);
+      return {
+        success: false,
+        message:
+          error instanceof Error ? error.message : 'Failed to update standings',
+      };
+    }
   },
 });

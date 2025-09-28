@@ -11,3 +11,4 @@ p.s. I actually happen to play in this league, and got tired of the experience w
 - TailwindCSS - Utility first CSS framework
 - Better Auth - Auth framework to allow AMSA admins to update schedules/standings
 - Convex - Real Time Database
+- @dnd-kit - Tooklkit for admins to update table standings using drag and drop
