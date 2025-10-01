@@ -21,8 +21,14 @@ import { useIsTablet } from '@/lib/hooks/use-is-tablet';
 import { Logo } from './logo';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { ChevronDown, ChevronRight, Menu, ShieldUser } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import {
+  ChevronDown,
+  ChevronRight,
+  Lock,
+  Menu,
+  ShieldUser,
+} from 'lucide-react';
 import {
   AMSAPoliciesNavigationItems,
   leagueNavigationItems,
@@ -229,12 +235,12 @@ export default function Navigation() {
                 <Link
                   href="/admin"
                   className={cn(
-                    'flex items-center gap-2 p-2 rounded hover:bg-accent w-full',
+                    'flex items-center gap-2 p-2 rounded hover:bg-accent w-full text-sm',
                     pathname === '/admin' && 'bg-accent'
                   )}
                   onClick={() => setOpen(false)}
                 >
-                  <ShieldUser className="size-4" />
+                  <Lock className="size-4" />
                   <span>Admin</span>
                 </Link>
               </div>

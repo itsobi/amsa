@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 import { Button } from '@/components/ui/button';
+import { Tally5, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -52,7 +53,7 @@ export function AdminHomeView() {
             </p>
           </div>
           <div className="flex items-center justify-center">
-            <span className="text-4xl">⚽</span>
+            <Tally5 className="size-4xl" />
           </div>
           <div className="py-4">
             <Link href="/admin/update-results">
@@ -69,7 +70,7 @@ export function AdminHomeView() {
             </p>
           </div>
           <div className="flex items-center justify-center">
-            <span className="text-4xl">📈</span>
+            <TrendingUp className="size-4xl" />
           </div>
           <div className="py-4">
             <Link href="/admin/update-standings">
