@@ -30,13 +30,12 @@ export const sheetNavigationItems = [
     subItems: [
       { label: 'Schedules', href: '/schedules', icon: Calendar },
       { label: 'Standings', href: '/standings', icon: Table },
-      { label: 'Suspensions', href: '/suspensions', icon: CircleAlert },
       {
-        label: 'AMSA Appeal Process',
-        href: '/amsa-appeal-process',
+        label: 'AMSA Appeals',
+        href: '/appeals',
         icon: NotebookPen,
       },
-      { label: 'AMSA Rules', href: '/amsa-rules', icon: NotebookText },
+      { label: 'AMSA Rules', href: '/rules', icon: NotebookText },
       {
         label: 'AMSA Policies',
         href: '/amsa-policies',
@@ -99,53 +98,52 @@ export const sheetNavigationItems = [
 export const leagueNavigationItems = [
   { label: 'Schedule', href: '/schedules', icon: Calendar },
   { label: 'Standings', href: '/standings', icon: Table },
-  { label: 'Suspensions', href: '/suspensions', icon: CircleAlert },
   {
-    label: 'AMSA Appeal Process',
-    href: '/amsa-appeal-process',
+    label: 'AMSA Appeals',
+    href: '/appeals',
     icon: NotebookPen,
   },
-  { label: 'AMSA Rules', href: '/amsa-rules', icon: NotebookText },
+  { label: 'AMSA Rules', href: '/rules', icon: NotebookText },
 ];
 
 export const AMSAPoliciesNavigationItems = [
   {
     label: 'Zero Tolerance Policy',
-    href: '/amsa-policies/zero-tolerance',
+    href: '/policies/zero-tolerance',
     icon: CircleAlert,
   },
   {
     label: 'Onion Creek Soccer Complex Field Use Policy',
-    href: '/amsa-policies/field-use',
+    href: '/policies/field-use',
     icon: ShieldAlert,
   },
   {
     label: 'Barbeque Policy',
-    href: '/amsa-policies/barbeque',
+    href: '/policies/barbeque',
     icon: UtensilsCrossed,
   },
-  { label: 'OCSC Drone Policy', href: '/amsa-policies/drone', icon: Drone },
-  { label: 'Lightning Policy', href: '/amsa-policies/lightning', icon: Zap },
-  { label: 'Mailing Policy', href: '/amsa-policies/mailing', icon: Mail },
+  { label: 'OCSC Drone Policy', href: '/policies/drone', icon: Drone },
+  { label: 'Lightning Policy', href: '/policies/lightning', icon: Zap },
+  { label: 'Mailing Policy', href: '/policies/mailing', icon: Mail },
   {
     label: 'OCSC Open Carry Policy',
-    href: '/amsa-policies/open-carry',
+    href: '/policies/open-carry',
     icon: Ban,
   },
-  { label: 'OCSC Parking Policy', href: '/amsa-policies/parking', icon: Car },
+  { label: 'OCSC Parking Policy', href: '/policies/parking', icon: Car },
   {
     label: 'Privacy Policy',
-    href: '/amsa-policies/privacy',
+    href: '/policies/privacy',
     icon: ShieldCheck,
   },
   {
     label: 'OCSC Rainout Policy',
-    href: '/amsa-policies/rainout',
+    href: '/policies/rainout',
     icon: CloudRain,
   },
   {
     label: 'Team and Player Registration Policy',
-    href: '/amsa-policies/registration',
+    href: '/policies/registration',
     icon: Users,
   },
 ];
