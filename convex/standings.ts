@@ -1,5 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
+import { ADMIN_EMAILS } from '@/emails';
 
 export const createStandings = mutation({
   args: {
@@ -25,7 +26,7 @@ export const createStandings = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
+    if (!ADMIN_EMAILS.includes(identity?.email as string)) {
       return {
         success: false,
         message: 'Unauthorized',
@@ -74,6 +75,14 @@ export const updateStandings = mutation({
     ),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!ADMIN_EMAILS.includes(identity?.email as string)) {
+      return {
+        success: false,
+        message: 'Unauthorized',
+      };
+    }
     try {
       Promise.all(
         args.tableUpdates.map((update) =>

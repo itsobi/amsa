@@ -21,7 +21,7 @@ export const createMatches = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
+    if (!ADMIN_EMAILS.includes(identity?.email as string)) {
       return {
         success: false,
         message: 'Unauthorized',
@@ -48,13 +48,8 @@ export const updateMatch = mutation({
   handler: async (ctx, args) => {
     try {
       const identity = await ctx.auth.getUserIdentity();
-      if (!identity) {
-        return {
-          success: false,
-          message: 'Unauthorized',
-        };
-      }
-      if (!ADMIN_EMAILS.includes(identity.email as string)) {
+
+      if (!ADMIN_EMAILS.includes(identity?.email as string)) {
         return {
           success: false,
           message: 'Unauthorized',
