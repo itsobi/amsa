@@ -11,10 +11,11 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { User } from 'better-auth';
 import { authClient } from '@/lib/auth-client';
-import { LogOut } from 'lucide-react';
+import { LogOut, Pencil, Tally5, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export function UserButton({ user }: { user: User }) {
   const router = useRouter();
@@ -49,8 +50,23 @@ export function UserButton({ user }: { user: User }) {
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+        <DropdownMenuLabel className="font-semibold">
+          {user.name}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
+
+        <DropdownMenuItem asChild>
+          <Link href="/admin/update-results">
+            <Tally5 className="size-4" />
+            <span>Update Results</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/admin/update-standings">
+            <TrendingUp className="size-4" />
+            <span>Update Standings</span>
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="size-4" />
           Sign Out
