@@ -5,6 +5,7 @@ import { Header } from '@/components/header/header';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ConvexClientProvider } from '@/components/providers/convex-client-provider';
+import { Footer } from '@/components/footer';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,12 +39,13 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <div className="fixed top-0 left-0 right-0 z-50 bg-background shadow-xs">
-              <Header />
-            </div>
+            <Header />
             <main className="container mx-auto px-4 py-8 md:px-0 mt-[72px]">
               {children}
             </main>
+
+            <Footer />
+
             <Toaster richColors />
           </ThemeProvider>
         </ConvexClientProvider>
