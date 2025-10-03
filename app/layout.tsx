@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
         <ConvexClientProvider>
           <ThemeProvider
@@ -40,7 +40,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
-            <main className="container mx-auto px-4 py-8 md:px-0 mt-[72px]">
+            <main className="container mx-auto px-4 py-8 md:px-0 mt-[72px] flex-1">
               {children}
             </main>
 
