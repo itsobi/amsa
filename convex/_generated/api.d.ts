@@ -17,6 +17,7 @@ import type * as matches from "../matches.js";
 import type * as schedules from "../schedules.js";
 import type * as seasons from "../seasons.js";
 import type * as standings from "../standings.js";
+import type * as users from "../users.js";
 
 import type {
   ApiFromModules,
@@ -42,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   schedules: typeof schedules;
   seasons: typeof seasons;
   standings: typeof standings;
+  users: typeof users;
 }>;
 declare const fullApiWithMounts: typeof fullApi;
 
