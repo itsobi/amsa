@@ -53,6 +53,7 @@ import { toast } from 'sonner';
 import { PageHeading } from '@/components/page-heading';
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
+import { UpdateStandingsDialog } from './update-standings-dialog';
 
 function SortableItem({ standing }: { standing: Doc<'standings'> }) {
   const {
@@ -73,15 +74,21 @@ function SortableItem({ standing }: { standing: Doc<'standings'> }) {
   return (
     <TableRow
       key={standing._id}
-      className={cn(
-        'cursor-grab touch-none active:cursor-grabbing',
-        isDragging && 'cursor-grabbing z-10 opacity-50 shadow-md'
-      )}
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
+      className={cn(
+        'hover:bg-transparent',
+        isDragging && 'cursor-grabbing z-10 opacity-50 shadow-md'
+      )}
     >
+      <TableCell
+        {...attributes}
+        {...listeners}
+        className="cursor-grab touch-none active:cursor-grabbing w-8"
+      >
+        ⋮⋮
+      </TableCell>
+
       <TableCell>{standing.team}</TableCell>
       <TableCell>{standing.teamCaptain}</TableCell>
       <TableCell>
@@ -95,6 +102,11 @@ function SortableItem({ standing }: { standing: Doc<'standings'> }) {
       <TableCell>{standing.goalsAgainst}</TableCell>
       <TableCell>{standing.goalDifference}</TableCell>
       <TableCell className="font-bold">{standing.points}</TableCell>
+
+      {/* pencil / dialog trigger */}
+      <TableCell>
+        <UpdateStandingsDialog standing={standing} />
+      </TableCell>
     </TableRow>
   );
 }
@@ -246,10 +258,13 @@ export function UpdateStandingsView() {
               </p>
             </div>
           )}
-          <h4 className="mb-8 text-sm text-center text-muted-foreground">
-            *To update standings, drag and drop the team to the desired
-            position*
-          </h4>
+          <div className="mb-8 text-sm text-center text-muted-foreground space-y-2">
+            <h4>
+              *To update a team&apos;s table position, press and hold on the ⋮⋮
+              icon and drop to the desired position*
+            </h4>
+            <h4>*To update a team&apos;s stats, click on the pencil icon*</h4>
+          </div>
 
           <DndContext
             sensors={sensors}
@@ -257,10 +272,11 @@ export function UpdateStandingsView() {
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
           >
-            {/* <Button onClick={handleUpdateTablePosition}>Update Table Position</Button> */}
             <Table>
               <TableHeader>
-                <TableRow>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead />
+                  {/* Column for drag handle */}
                   <TableHead>Team Name</TableHead>
                   <TableHead>Team Captain</TableHead>
                   <TableHead>Colors</TableHead>
@@ -272,6 +288,7 @@ export function UpdateStandingsView() {
                   <TableHead>GA</TableHead>
                   <TableHead>GD</TableHead>
                   <TableHead>Points</TableHead>
+                  <TableHead />
                 </TableRow>
               </TableHeader>
               <TableBody>

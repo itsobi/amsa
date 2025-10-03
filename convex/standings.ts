@@ -103,3 +103,45 @@ export const updateStandings = mutation({
     }
   },
 });
+
+export const updateStandingsStats = mutation({
+  args: {
+    id: v.id('standings'),
+    team: v.string(),
+    values: v.object({
+      gamesPlayed: v.optional(v.number()),
+      gamesWon: v.optional(v.number()),
+      gamesDrawn: v.optional(v.number()),
+      gamesLost: v.optional(v.number()),
+      goalsScored: v.optional(v.number()),
+      goalsAgainst: v.optional(v.number()),
+      goalDifference: v.optional(v.number()),
+      points: v.optional(v.number()),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!ADMIN_EMAILS.includes(identity?.email as string)) {
+      return {
+        success: false,
+        message: 'Unauthorized',
+      };
+    }
+
+    try {
+      await ctx.db.patch(args.id, args.values);
+      return {
+        success: true,
+        message: `Stats updated successfully for ${args.team}`,
+      };
+    } catch (error) {
+      console.error('Error updating stats:', error);
+      return {
+        success: false,
+        message:
+          error instanceof Error ? error.message : 'Failed to update stats',
+      };
+    }
+  },
+});

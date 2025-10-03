@@ -1,16 +1,15 @@
 'use client';
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Loader, Pencil } from 'lucide-react';
 import { Match } from './matches-columns';
 import { z } from 'zod';
@@ -56,6 +55,11 @@ export function UpdateMatch({ match }: { match: Match }) {
     },
   });
 
+  const closeDialog = () => {
+    setIsOpen(false);
+    form.reset();
+  };
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (
       values.homeTeamScore === match.homeTeamScore &&
@@ -84,14 +88,17 @@ export function UpdateMatch({ match }: { match: Match }) {
   };
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger>
         <Pencil className="size-3 lg:size-3.5 cursor-pointer hover:text-blue-500" />
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Update Match Result</AlertDialogTitle>
-        </AlertDialogHeader>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Update Match Result</DialogTitle>
+          <DialogDescription className="sr-only">
+            Update the result for {match.homeTeam} vs {match.awayTeam}
+          </DialogDescription>
+        </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -125,29 +132,30 @@ export function UpdateMatch({ match }: { match: Match }) {
                 )}
               />
             </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={
-                !form.formState.isValid ||
-                form.formState.isSubmitting ||
-                isLoading
-              }
-            >
-              {isLoading ? (
-                <Loader className="size-4 animate-spin" />
-              ) : (
-                'Update'
-              )}
-            </Button>
+            <div className="space-y-4">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={closeDialog}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!form.formState.isDirty || isLoading}
+              >
+                {isLoading ? (
+                  <Loader className="size-4 animate-spin" />
+                ) : (
+                  'Update'
+                )}
+              </Button>
+            </div>
           </form>
         </Form>
-        <AlertDialogFooter>
-          <AlertDialogCancel className="w-full" onClick={() => form.reset()}>
-            Cancel
-          </AlertDialogCancel>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      </DialogContent>
+    </Dialog>
   );
 }
