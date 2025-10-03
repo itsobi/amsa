@@ -15,12 +15,13 @@ import { Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -35,6 +36,9 @@ const resetPasswordFormSchema = z.object({
   password: z.string().min(8, {
     message: 'Password must be at least 8 characters.',
   }),
+  confirmPassword: z.string().min(8, {
+    message: 'Password must be at least 8 characters.',
+  }),
 });
 
 export function ResetPassword({ token }: { token: string }) {
@@ -43,13 +47,20 @@ export function ResetPassword({ token }: { token: string }) {
   const form = useForm<z.infer<typeof resetPasswordFormSchema>>({
     resolver: zodResolver(resetPasswordFormSchema),
     defaultValues: {
+      email: '',
       password: '',
+      confirmPassword: '',
     },
   });
 
   const onSubmit = async (
     formData: z.infer<typeof resetPasswordFormSchema>
   ) => {
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match.');
+      return;
+    }
+
     setFormIsLoading(true);
     const { error } = await authClient.resetPassword({
       newPassword: formData.password,
@@ -77,59 +88,73 @@ export function ResetPassword({ token }: { token: string }) {
   };
 
   return (
-    <AlertDialog open={true}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Reset Password</AlertDialogTitle>
-          <AlertDialogDescription>
-            Enter your email and your new password to reset your account.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+    <div className="flex items-center justify-center">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Reset password</CardTitle>
+          <CardDescription>
+            Please enter your name, email and password to create an reset your
+            password. After verification, we will sign you in automatically.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="example@gmail.com" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="********" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            placeholder="********"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="text-sm"
-                      {...field}
-                      placeholder="example@gmail.com"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="text-sm"
-                      {...field}
-                      placeholder="********"
-                      type="password"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="mt-8 space-y-4">
               <Button
-                className="w-full"
                 type="submit"
+                className="w-full mt-8"
                 disabled={!form.formState.isValid || formIsLoading}
               >
                 {formIsLoading ? (
@@ -138,19 +163,10 @@ export function ResetPassword({ token }: { token: string }) {
                   'Reset Password'
                 )}
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => router.replace('/')}
-                className="w-full"
-                type="button"
-                disabled={formIsLoading}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </AlertDialogContent>
-    </AlertDialog>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

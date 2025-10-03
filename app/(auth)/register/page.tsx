@@ -1,12 +1,12 @@
 'use client';
 
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 import {
   Form,
@@ -26,7 +26,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Loader, Mail } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import { ADMIN_EMAILS } from '@/emails';
 import { authClient } from '@/lib/auth-client';
 
@@ -92,78 +92,74 @@ export default function RegisterPage() {
   };
 
   return (
-    <AlertDialog open={true}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Register</AlertDialogTitle>
-          <AlertDialogDescription>
+    <div className="flex items-center justify-center">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Register for an account</CardTitle>
+          <CardDescription>
             Please enter your name, email and password to create an account. If
-            you are not a AMSA admin, you will not be allowed to register for an
+            you are not a AMSA admin, you will not be allowed to create an
             account.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="John Doe" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="example@gmail.com" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            placeholder="********"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="text-sm"
-                      {...field}
-                      placeholder="John Doe"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="text-sm"
-                      {...field}
-                      placeholder="example@gmail.com"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      className="text-sm"
-                      {...field}
-                      placeholder="********"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="mt-8 space-y-4">
               <Button
-                className="w-full"
                 type="submit"
+                className="w-full mt-8"
                 disabled={!form.formState.isValid || formIsLoading}
               >
                 {formIsLoading ? (
@@ -172,39 +168,20 @@ export default function RegisterPage() {
                   'Register'
                 )}
               </Button>
-            </div>
-          </form>
-        </Form>
+            </form>
+          </Form>
+        </CardContent>
 
-        <Button
-          variant="outline"
-          onClick={() => router.replace('/')}
-          className="w-full"
-          type="button"
-          disabled={formIsLoading}
-        >
-          Cancel
-        </Button>
-
-        <div className="mt-4 text-center space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Already have an account?{' '}
-            <Link
-              href="/sign-in"
-              className="text-primary font-semibold hover:underline"
-            >
-              Sign in
-            </Link>
-          </p>
-
+        <p className="text-center text-sm text-muted-foreground">
+          Already have an account?{' '}
           <Link
-            href="/forgot-password"
-            className="text-primary text-sm font-semibold hover:underline"
+            href="/sign-in"
+            className="text-primary font-semibold hover:underline"
           >
-            Forgot password?
+            Sign in
           </Link>
-        </div>
-      </AlertDialogContent>
-    </AlertDialog>
+        </p>
+      </Card>
+    </div>
   );
 }

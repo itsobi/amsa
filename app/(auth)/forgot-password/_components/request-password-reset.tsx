@@ -12,15 +12,15 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,6 +28,8 @@ import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import { ADMIN_EMAILS } from '@/emails';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 const callbackURL =
   process.env.NODE_ENV === 'production'
@@ -41,7 +43,6 @@ const requestPasswordResetFormSchema = z.object({
 });
 
 export function RequestPasswordReset() {
-  const router = useRouter();
   const [formIsLoading, setFormIsLoading] = useState(false);
   const form = useForm<z.infer<typeof requestPasswordResetFormSchema>>({
     resolver: zodResolver(requestPasswordResetFormSchema),
@@ -49,6 +50,8 @@ export function RequestPasswordReset() {
       email: '',
     },
   });
+
+  const verifyUser = useMutation(api.users.verifyResetPasswordRequest);
 
   const onSubmit = async (
     formData: z.infer<typeof requestPasswordResetFormSchema>
@@ -58,77 +61,77 @@ export function RequestPasswordReset() {
       return;
     }
 
-    setFormIsLoading(true);
-    const { error } = await authClient.requestPasswordReset({
-      email: formData.email,
-      redirectTo: callbackURL,
-    });
+    const verifyUserResponse = await verifyUser();
 
-    if (error) {
-      setFormIsLoading(false);
-      toast.error(error.message);
-    } else {
-      setFormIsLoading(false);
-      toast.success('Please check your email to reset your password');
+    if (!verifyUserResponse.success) {
+      toast.error(verifyUserResponse.message);
+      return;
     }
+
+    await authClient.requestPasswordReset(
+      {
+        email: formData.email,
+        redirectTo: callbackURL,
+      },
+      {
+        onRequest: () => {
+          setFormIsLoading(true);
+        },
+        onSuccess: () => {
+          setFormIsLoading(false);
+          toast.success('Please check your email to reset your password');
+        },
+        onError: (ctx) => {
+          setFormIsLoading(false);
+          toast.error(ctx.error.message);
+        },
+      }
+    );
   };
 
   return (
-    <AlertDialog open={true}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Forgot Password</AlertDialogTitle>
-          <AlertDialogDescription>
+    <div className="flex items-center justify-center">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Forgot Password</CardTitle>
+          <CardDescription>
             Please enter your email to reset your password.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="example@gmail.com" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="text-sm"
-                      {...field}
-                      placeholder="example@gmail.com"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="mt-8 space-y-4">
               <Button
-                className="w-full"
                 type="submit"
+                className="w-full mt-8"
                 disabled={!form.formState.isValid || formIsLoading}
               >
                 {formIsLoading ? (
                   <Loader className="size-4 animate-spin" />
                 ) : (
-                  'Reset Password'
+                  'Register'
                 )}
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => router.replace('/')}
-                className="w-full"
-                type="button"
-                disabled={formIsLoading}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </AlertDialogContent>
-    </AlertDialog>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

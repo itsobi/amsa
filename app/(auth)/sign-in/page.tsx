@@ -1,14 +1,6 @@
 'use client';
 
 import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-
-import {
   Form,
   FormField,
   FormItem,
@@ -17,13 +9,23 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
-import { Input } from '@/components/ui/input';
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
+
 import { Loader } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -73,97 +75,87 @@ export default function SignInPage() {
   };
 
   return (
-    <AlertDialog open={true}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Sign In</AlertDialogTitle>
-          <AlertDialogDescription>
-            Welcome back! Please enter your email and password to continue.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+    <div className="flex items-center justify-center">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Login to your account</CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="example@gmail.com" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center">
+                          <FormLabel>Password</FormLabel>
+                          <Link
+                            className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-muted-foreground"
+                            href="/forgot-password"
+                          >
+                            Forgot your password?
+                          </Link>
+                        </div>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            type="password"
+                            placeholder="********"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="text-sm"
-                      {...field}
-                      placeholder="example@gmail.com"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      className="text-sm"
-                      {...field}
-                      placeholder="********"
-                    />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="mt-8 space-y-4">
               <Button
-                className="w-full"
                 type="submit"
+                className="w-full mt-8"
                 disabled={!form.formState.isValid || formIsLoading}
               >
                 {formIsLoading ? (
                   <Loader className="size-4 animate-spin" />
                 ) : (
-                  'Sign In'
+                  'Login'
                 )}
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => router.replace('/')}
-                className="w-full"
-                type="button"
-                disabled={formIsLoading}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        </Form>
+            </form>
+          </Form>
+        </CardContent>
 
-        <div className="mt-4 text-center space-y-4">
-          <p className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link
-              href="/register"
-              className="text-primary font-semibold hover:underline"
-            >
-              Register
-            </Link>
-          </p>
+        <p className="text-center text-sm text-muted-foreground">
+          Don&apos;t have an account?{' '}
           <Link
-            href="/forgot-password"
-            className="text-primary text-sm font-semibold hover:underline"
+            href="/register"
+            className="text-primary font-semibold hover:underline"
           >
-            Forgot password?
+            Register
           </Link>
-        </div>
-      </AlertDialogContent>
-    </AlertDialog>
+        </p>
+      </Card>
+    </div>
   );
 }
