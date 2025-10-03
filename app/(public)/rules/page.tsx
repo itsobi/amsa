@@ -474,7 +474,7 @@ export default function RulesPage() {
             href="https://docs.google.com/forms/d/e/1FAIpQLSfct0WIGcSUp_ItcGYr9pPGipBkIws2TNl9fPaICwiHBgMn_A/viewform"
             target="_blank"
             rel="noopener noreferrer"
-            className="underline text-blue-500 text-center block mb-6"
+            className="underline underline-offset-4 text-blue-500 text-center block mb-6"
           >
             Request a Postponement..
           </a>
@@ -665,7 +665,7 @@ export default function RulesPage() {
               href="https://www.ussoccer.com/rap"
               target="_blank"
               rel="noopener noreferrer"
-              className="underline text-blue-500"
+              className="underline underline-offset-4 text-blue-500"
             >
               https://www.ussoccer.com/rap
             </a>
@@ -879,7 +879,10 @@ export default function RulesPage() {
           </div>
         </div>
 
-        <Link href="/appeals" className="text-center underline text-blue-500">
+        <Link
+          href="/appeals"
+          className="text-center underline underline-offset-4 text-blue-500"
+        >
           File an Appeal...
         </Link>
 

@@ -44,7 +44,7 @@ export function AdminHomeView() {
         description="Welcome to the Admin Home. By being an admin, you can update scores and standings."
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="flex flex-col gap-4 max-w-lg border p-4 rounded-sm shadow-sm">
+        <div className="flex flex-col gap-6 justify-between max-w-lg border p-4 rounded-sm shadow-sm">
           <div className="space-y-1">
             <h4 className="md:text-lg">Update Match Scores</h4>
             <p className="text-sm text-muted-foreground">
@@ -61,7 +61,7 @@ export function AdminHomeView() {
             </Link>
           </div>
         </div>
-        <div className="flex flex-col gap-4 max-w-lg border p-4 rounded-sm shadow-sm">
+        <div className="flex flex-col gap-6 justify-between max-w-lg border p-4 rounded-sm shadow-sm">
           <div className="space-y-1">
             <h4 className="md:text-lg">Update Table Standings</h4>
             <p className="text-sm text-muted-foreground">

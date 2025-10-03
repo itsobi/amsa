@@ -8,7 +8,10 @@ export default function AppealsPage() {
       <PageHeading title="AMSA Appeals" />
       <PageInfoContainer>
         <p>
-          <Link href="/rules" className="underline text-blue-500">
+          <Link
+            href="/rules"
+            className="underline underline-offset-4 text-blue-500"
+          >
             AMSA Rule 5
           </Link>{' '}
           describes the AMSA Appeal process. Carefully read all 11 paragraphs
@@ -21,7 +24,7 @@ export default function AppealsPage() {
           File your appeal via this{' '}
           <a
             href="https://docs.google.com/forms/d/e/1FAIpQLSe2sgRdBIRgQ84Tn4GHAQiroPAIQ6db1p-G1cHHaehpXz15sA/viewform"
-            className="underline text-blue-500"
+            className="underline underline-offset-4 text-blue-500"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -36,14 +39,14 @@ export default function AppealsPage() {
           matter, which is under the purview of the{' '}
           <a
             href="mailto:disco@austinmenssoccer.com"
-            className="underline text-blue-500"
+            className=" underline-offset-4 text-blue-500"
           >
             AMSA Disciplinary Committee
           </a>
           . Questions about the appeal process may be directed at:{' '}
           <a
             href="mailto:admin@austinmenssoccer.com"
-            className="underline text-blue-500"
+            className="underline underline-offset-4 text-blue-500"
           >
             admin@austinmenssoccer.com
           </a>
