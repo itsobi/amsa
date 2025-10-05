@@ -38,31 +38,30 @@ export const sheetNavigationItems = [
       { label: 'AMSA Rules', href: '/rules', icon: NotebookText },
       {
         label: 'AMSA Policies',
-        href: '/amsa-policies',
+        href: '/policies',
         icon: BookMarked,
         subItems: [
           {
             label: 'Zero Tolerance Policy',
-            href: '/amsa-policies/zero-tolerance',
+            href: '/policies/zero-tolerance',
           },
           {
             label: 'Onion Creek Soccer Complex Field Use Policy',
-            href: '/amsa-policies/field-use',
+            href: '/policies/ocsc-use-policy',
           },
-          { label: 'Barbeque Policy', href: '/amsa-policies/barbeque' },
-          { label: 'OCSC Drone Policy', href: '/amsa-policies/drone' },
-          { label: 'Lightning Policy', href: '/amsa-policies/lightning' },
-          { label: 'Mailing Policy', href: '/amsa-policies/mailing' },
+          { label: 'Barbeque Policy', href: '/policies/barbeque' },
+          { label: 'OCSC Drone Policy', href: '/policies/drones' },
+          { label: 'Lightning Policy', href: '/policies/lightning' },
+          { label: 'Mailing Policy', href: '/policies/mailing' },
           {
             label: 'OCSC Open Carry Policy',
-            href: '/amsa-policies/open-carry',
+            href: '/policies/open-carry',
           },
-          { label: 'OCSC Parking Policy', href: '/amsa-policies/parking' },
-          { label: 'Privacy Policy', href: '/amsa-policies/privacy' },
-          { label: 'OCSC Rainout Policy', href: '/amsa-policies/rainout' },
+          { label: 'OCSC Parking Policy', href: '/policies/parking' },
+          { label: 'OCSC Rainout Policy', href: '/policies/rainout' },
           {
             label: 'Team and Player Registration Policy',
-            href: '/amsa-policies/registration',
+            href: '/policies/registration',
           },
         ],
       },
@@ -114,7 +113,7 @@ export const AMSAPoliciesNavigationItems = [
   },
   {
     label: 'Onion Creek Soccer Complex Field Use Policy',
-    href: '/policies/field-use',
+    href: '/policies/ocsc-use-policy',
     icon: ShieldAlert,
   },
   {
@@ -122,7 +121,7 @@ export const AMSAPoliciesNavigationItems = [
     href: '/policies/barbeque',
     icon: UtensilsCrossed,
   },
-  { label: 'OCSC Drone Policy', href: '/policies/drone', icon: Drone },
+  { label: 'OCSC Drone Policy', href: '/policies/drones', icon: Drone },
   { label: 'Lightning Policy', href: '/policies/lightning', icon: Zap },
   { label: 'Mailing Policy', href: '/policies/mailing', icon: Mail },
   {
@@ -131,11 +130,7 @@ export const AMSAPoliciesNavigationItems = [
     icon: Ban,
   },
   { label: 'OCSC Parking Policy', href: '/policies/parking', icon: Car },
-  {
-    label: 'Privacy Policy',
-    href: '/policies/privacy',
-    icon: ShieldCheck,
-  },
+
   {
     label: 'OCSC Rainout Policy',
     href: '/policies/rainout',

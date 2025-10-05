@@ -182,6 +182,7 @@ export default function Navigation() {
                                           <li key={nestedItem.label}>
                                             <Link
                                               href={nestedItem.href}
+                                              onClick={() => setOpen(false)}
                                               className={cn(
                                                 'flex items-center gap-2 p-2 rounded hover:bg-accent text-sm',
                                                 pathname === nestedItem.href &&
@@ -198,12 +199,12 @@ export default function Navigation() {
                                 ) : (
                                   <Link
                                     href={subItem.href}
+                                    onClick={() => setOpen(false)}
                                     className={cn(
                                       'flex items-center gap-2 p-2 rounded hover:bg-accent text-sm',
                                       pathname === subItem.href &&
                                         'bg-accent rounded'
                                     )}
-                                    onClick={() => setOpen(false)}
                                   >
                                     <subItem.icon className="size-4" />
                                     <span>{subItem.label}</span>
@@ -217,6 +218,7 @@ export default function Navigation() {
                     ) : (
                       <Link
                         href={item.href}
+                        onClick={() => setOpen(false)}
                         className={cn(
                           'flex items-center gap-2 p-2 rounded hover:bg-accent',
                           pathname === item.href && 'bg-accent rounded'
@@ -234,11 +236,11 @@ export default function Navigation() {
               <div className="px-4 pb-4">
                 <Link
                   href="/admin"
+                  onClick={() => setOpen(false)}
                   className={cn(
                     'flex items-center gap-2 p-2 rounded hover:bg-accent w-full text-sm',
                     pathname === '/admin' && 'bg-accent'
                   )}
-                  onClick={() => setOpen(false)}
                 >
                   <Lock className="size-4" />
                   <span>Admin</span>
@@ -268,6 +270,19 @@ export default function Navigation() {
               ))}
             </ul>
           </NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild>
+            <Link
+              href="/team-registration"
+              className={cn(
+                linkClassName,
+                pathname === '/team-registration' && 'bg-accent'
+              )}
+            >
+              Team Registration
+            </Link>
+          </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>AMSA Policies</NavigationMenuTrigger>
