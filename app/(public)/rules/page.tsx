@@ -1,4 +1,5 @@
 import { PageHeading } from '@/components/page-heading';
+import { PageInfoContainer } from '@/components/page-info-container';
 import Link from 'next/link';
 
 const APPEALS = [
@@ -36,7 +37,9 @@ function RulesOrderedListSection({
                 <ol className="space-y-2 list-decimal list-inside pl-4 mt-2">
                   {typeof item === 'object' &&
                     item.sublist &&
-                    item.sublist.map((subItem) => <li>{subItem}</li>)}
+                    item.sublist.map((subItem, index) => (
+                      <li key={index}>{subItem}</li>
+                    ))}
                 </ol>
               )}
             </li>
@@ -76,7 +79,7 @@ export default function RulesPage() {
     <>
       <PageHeading title="AMSA Rules" />
 
-      <div className="flex flex-col gap-8 mx-auto max-w-5xl">
+      <PageInfoContainer>
         <div className="space-y-2">
           <h2 className="text-2xl font-semibold">Preface</h2>
 
@@ -313,32 +316,26 @@ export default function RulesPage() {
             <li>
               No transfers shall be permitted after the 5th scheduled Match Day
               of the Spring Round, except for:
-              <ol className="space-y-2 list-decimal list-inside pl-4 mt-2">
-                <li>
-                  From the beginning of the season until the end of February a
-                  player may change teams without delay once, provided all of
-                  the proper procedures have been followed. A player who changes
-                  teams a second time during this interval is not eligible to
-                  play in the next four games played by the new team.
-                  <ol className="space-y-2 list-decimal list-inside pl-4 mt-2">
-                    <li>
-                      The four game sit-out requirement shall be waived for
-                      players changing from teams that have folded in
-                      mid-season.
-                    </li>
-                    <li>
-                      The Executive Committee or its agents may waive the
-                      requirement if the player can show that he did not play in
-                      the preceding four games played by the team he is leaving.
-                    </li>
-                  </ol>
-                  <li>
-                    After the 4th scheduled Match Day of the Spring Round until
-                    the start of the summer season, no transfers will be
-                    permitted.
-                  </li>
-                </li>
-              </ol>
+            </li>
+            <li>
+              From the beginning of the season until the end of February a
+              player may change teams without delay once, provided all of the
+              proper procedures have been followed. A player who changes teams a
+              second time during this interval is not eligible to play in the
+              next four games played by the new team.
+            </li>
+            <li>
+              The four game sit-out requirement shall be waived for players
+              changing from teams that have folded in mid-season.
+            </li>
+            <li>
+              The Executive Committee or its agents may waive the requirement if
+              the player can show that he did not play in the preceding four
+              games played by the team he is leaving.
+            </li>
+            <li>
+              After the 4th scheduled Match Day of the Spring Round until the
+              start of the summer season, no transfers will be permitted.
             </li>
             <li>
               The Administrator shall notify the previous captain of the
@@ -889,7 +886,7 @@ export default function RulesPage() {
         <p className="italic text-sm">
           As amended by the Board of Captains on August 21, 2025.
         </p>
-      </div>
+      </PageInfoContainer>
     </>
   );
 }
