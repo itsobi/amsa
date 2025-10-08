@@ -23,10 +23,6 @@ export function Header() {
 
   const user = authClient.useSession();
 
-  if (user.isPending) {
-    return <LoadingScreen />;
-  }
-
   return (
     <HeaderContainer>
       <div className="container mx-auto px-4 py-4 md:px-0 flex justify-between items-center">
