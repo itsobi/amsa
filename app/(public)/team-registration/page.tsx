@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -166,7 +165,7 @@ export default function TeamRegistrationPage() {
             <h4 className="text-xl">AMSA 2026 SUMMER (11v11 SUNDAY)</h4>
             <p>
               The Summer season runs from mid-June to mid August (9 games, no
-              make-up’s).
+              make-ups).
             </p>
             <div className="my-6">
               <ul className="mb-4">
@@ -230,7 +229,7 @@ export default function TeamRegistrationPage() {
                 href="/"
                 className="underline underline-offset-4 text-blue-500"
               >
-                “Looking for a team”
+                "Looking for a team"
               </Link>{' '}
               form on our frontpage.
             </li>
