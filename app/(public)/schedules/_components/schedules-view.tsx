@@ -28,6 +28,36 @@ import { Pencil, Printer } from 'lucide-react';
 import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
 
+export function MatchScore({
+  homeTeamScore,
+  awayTeamScore,
+  matchStatus,
+}: {
+  homeTeamScore: number | undefined;
+  awayTeamScore: number | undefined;
+  matchStatus: string | undefined;
+}) {
+  if (matchStatus === 'postponed' || matchStatus === 'cancelled') {
+    return <span className="uppercase italic">{matchStatus}</span>;
+  }
+  if (matchStatus === 'forfeit') {
+    return (
+      <span>
+        {homeTeamScore} - {awayTeamScore}(Forfeit)
+      </span>
+    );
+  }
+  if (homeTeamScore !== undefined && awayTeamScore !== undefined) {
+    return (
+      <span>
+        {homeTeamScore} - {awayTeamScore}
+      </span>
+    );
+  }
+
+  return <span>--</span>;
+}
+
 export function SchedulesView() {
   const router = useRouter();
   const pathname = usePathname();
@@ -150,15 +180,19 @@ export function SchedulesView() {
                       <TableCell>{convertTime(match.time)}</TableCell>
                       <TableCell>{getDivision(match.division)}</TableCell>
                       <TableCell
-                        className="cursor-pointer hover:text-blue-500 hover:underline"
+                        className="w-[200px] cursor-pointer hover:text-blue-500 hover:underline"
                         onClick={() =>
                           router.push(`/schedules/${match.homeTeam}`)
                         }
                       >
                         {match.homeTeam}
                       </TableCell>
-                      <TableCell>
-                        {match.homeTeamScore} - {match.awayTeamScore}
+                      <TableCell className="w-[150px]">
+                        <MatchScore
+                          homeTeamScore={match.homeTeamScore}
+                          awayTeamScore={match.awayTeamScore}
+                          matchStatus={match.matchStatus}
+                        />
                       </TableCell>
                       <TableCell
                         className="cursor-pointer hover:text-blue-500 hover:underline"
