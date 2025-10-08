@@ -63,25 +63,25 @@ export function About() {
 
             <div className="grid grid-cols-2 gap-4">
               <Card className="p-8 text-center space-y-2">
-                <div className="text-5xl font-black">100+</div>
+                <div className="text-3xl lg:text-5xl font-black">100+</div>
                 <div className="text-sm font-bold uppercase tracking-wide">
                   Teams
                 </div>
               </Card>
               <Card className="p-8 text-center space-y-2 bg-secondary">
-                <div className="text-5xl font-black">1000+</div>
+                <div className="text-3xl lg:text-5xl font-black">1000+</div>
                 <div className="text-sm font-bold uppercase tracking-wide">
                   Players
                 </div>
               </Card>
               <Card className="p-8 text-center space-y-2 bg-secondary ">
-                <div className="text-5xl font-black ">17</div>
+                <div className="text-3xl lg:text-5xl font-black">17</div>
                 <div className="text-sm font-bold uppercase tracking-wide">
                   Years
                 </div>
               </Card>
               <Card className="p-8 text-center space-y-2">
-                <div className="text-5xl font-black">14</div>
+                <div className="text-3xl lg:text-5xl font-black">14</div>
                 <div className="text-sm font-bold uppercase tracking-wide">
                   Divisions
                 </div>

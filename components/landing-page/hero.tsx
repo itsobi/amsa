@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export function Hero() {
   return (
-    <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* <div className="absolute inset-0 z-0">
         <img
           src="/soccer-players-on-field-action-shot.jpg"
@@ -14,7 +14,7 @@ export function Hero() {
 
       <div className="container mx-auto px-4 z-10 text-center">
         <div className="max-w-5xl mx-auto space-y-8">
-          <h1 className="text-6xl lg:text-8xl font-black text-secondary-foreground tracking-tight text-balance">
+          <h1 className="text-5xl lg:text-8xl font-black text-secondary-foreground tracking-tight text-balance">
             AUSTIN MEN&apos;S
             <br />
             SOCCER

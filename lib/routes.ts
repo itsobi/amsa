@@ -29,6 +29,7 @@ export const sheetNavigationItems = [
     subItems: [
       { label: 'Schedules', href: '/schedules', icon: Calendar },
       { label: 'Standings', href: '/standings', icon: Table },
+      { label: 'Suspensions', href: '/suspensions', icon: Ban },
       {
         label: 'AMSA Appeals',
         href: '/appeals',
@@ -96,6 +97,7 @@ export const sheetNavigationItems = [
 export const leagueNavigationItems = [
   { label: 'Schedule', href: '/schedules', icon: Calendar },
   { label: 'Standings', href: '/standings', icon: Table },
+  { label: 'Suspensions', href: '/suspensions', icon: Ban },
   {
     label: 'AMSA Appeals',
     href: '/appeals',
