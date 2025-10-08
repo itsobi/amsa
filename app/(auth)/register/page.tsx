@@ -27,8 +27,13 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { Loader } from 'lucide-react';
-import { ADMIN_EMAILS } from '@/emails';
 import { authClient } from '@/lib/auth-client';
+
+if (!process.env.NEXT_PUBLIC_ADMIN_EMAILS) {
+  throw new Error('ADMIN_EMAILS is not set');
+}
+
+const ADMIN_EMAILS = process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(',');
 
 const callbackURL =
   process.env.NODE_ENV === 'production'
