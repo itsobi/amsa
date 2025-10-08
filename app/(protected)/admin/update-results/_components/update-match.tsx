@@ -2,46 +2,56 @@
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Loader, Pencil } from 'lucide-react';
-import { Match } from './matches-columns';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Loader, Pencil } from 'lucide-react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import { Id } from '@/convex/_generated/dataModel';
+import { Doc } from '@/convex/_generated/dataModel';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const formSchema = z.object({
-  homeTeamScore: z.string().min(1, {
-    message: 'Home team score must be at least 1 character.',
+  matchStatus: z.enum(['completed', 'postponed', 'cancelled', 'forfeit'], {
+    message: 'Match status is required',
   }),
-  awayTeamScore: z.string().min(1, {
-    message: 'Away team score must be at least 1 character.',
+  homeTeamScore: z.number().min(0),
+  awayTeamScore: z.number().min(0),
+  time: z.string().min(4, {
+    message: 'Time is required and must be in the format HH:MM',
+  }),
+  venue: z.string().min(1, {
+    message: 'Venue is required',
   }),
 });
 
-export function UpdateMatch({ match }: { match: Match }) {
+export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
+  console.log(match);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -50,10 +60,25 @@ export function UpdateMatch({ match }: { match: Match }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      homeTeamScore: match.homeTeamScore,
-      awayTeamScore: match.awayTeamScore,
+      matchStatus: match.matchStatus ?? 'completed',
+      homeTeamScore: match.homeTeamScore ?? 0,
+      awayTeamScore: match.awayTeamScore ?? 0,
+      time: match.time,
+      venue: match.venue,
     },
   });
+
+  React.useEffect(() => {
+    form.reset({
+      matchStatus: match.matchStatus ?? 'completed',
+      homeTeamScore: match.homeTeamScore,
+      awayTeamScore: match.awayTeamScore,
+      time: match.time,
+      venue: match.venue,
+    });
+  }, [match, form]);
+
+  const watchedMatchStatus = form.watch('matchStatus');
 
   const closeDialog = () => {
     setIsOpen(false);
@@ -61,25 +86,41 @@ export function UpdateMatch({ match }: { match: Match }) {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (
-      values.homeTeamScore === match.homeTeamScore &&
-      values.awayTeamScore === match.awayTeamScore
-    ) {
+    const changedValues: Partial<z.infer<typeof formSchema>> = {};
+    // Compare each field and add to changedValues if different
+    if (values.homeTeamScore !== match.homeTeamScore) {
+      changedValues.homeTeamScore = values.homeTeamScore;
+    }
+    if (values.awayTeamScore !== match.awayTeamScore) {
+      changedValues.awayTeamScore = values.awayTeamScore;
+    }
+    if (values.matchStatus !== match.matchStatus) {
+      changedValues.matchStatus = values.matchStatus;
+    }
+    if (values.time !== match.time) {
+      changedValues.time = values.time;
+    }
+    if (values.venue !== match.venue) {
+      changedValues.venue = values.venue;
+    }
+    if (Object.keys(changedValues).length === 0) {
       toast.error('No changes made');
       return;
     }
+
     setIsLoading(true);
+
     const result = await updateMatch({
       match: {
         _id: match._id,
-        homeTeamScore: values.homeTeamScore,
-        awayTeamScore: values.awayTeamScore,
+        ...changedValues,
       },
     });
 
     if (result.success) {
       setIsLoading(false);
       toast.success(result.message);
+      form.reset();
       setIsOpen(false);
     } else {
       setIsLoading(false);
@@ -88,9 +129,17 @@ export function UpdateMatch({ match }: { match: Match }) {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+        if (!open) {
+          form.reset();
+        }
+      }}
+    >
       <DialogTrigger>
-        <Pencil className="size-3 lg:size-3.5 cursor-pointer hover:text-blue-500" />
+        <Pencil className="size-3 lg:size-3.5 text-blue-500 cursor-pointer" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -105,33 +154,92 @@ export function UpdateMatch({ match }: { match: Match }) {
             <div className="flex items-center justify-between gap-4 w-full">
               <FormField
                 control={form.control}
-                name="homeTeamScore"
+                name="matchStatus"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{match.homeTeam}</FormLabel>
-                    <FormControl>
-                      <Input {...field} className="w-full" type="number" />
-                    </FormControl>
-
-                    <FormMessage />
+                  <FormItem className="flex-1">
+                    <FormLabel>Match Status</FormLabel>
+                    <Select
+                      {...field}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full flex-1">
+                        <SelectValue placeholder="Select match status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="completed">Completed</SelectItem>
+                        <SelectItem value="postponed">Postponed</SelectItem>
+                        <SelectItem value="forfeit">Forfeit</SelectItem>
+                        <SelectItem value="cancelled">Cancelled</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
-                name="awayTeamScore"
+                name="time"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{match.awayTeam}</FormLabel>
+                  <FormItem className="flex-1">
+                    <FormLabel>Time</FormLabel>
                     <FormControl>
-                      <Input {...field} className="w-full" />
+                      <Input {...field} className="w-full flex-1" />
                     </FormControl>
-
-                    <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
+            {watchedMatchStatus === 'completed' ||
+            watchedMatchStatus === 'forfeit' ? (
+              <div className="flex items-center justify-between gap-4 w-full">
+                <FormField
+                  control={form.control}
+                  name="homeTeamScore"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>{match.homeTeam}</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="w-full" type="number" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="awayTeamScore"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>{match.awayTeam}</FormLabel>
+                      <FormControl>
+                        <Input {...field} className="w-full" />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            ) : (
+              <div className="rounded-lg bg-muted p-4">
+                <p className="text-sm text-muted-foreground">
+                  {watchedMatchStatus === 'postponed'
+                    ? 'This match has been postponed. Scores are not required.'
+                    : 'This match has been cancelled. Scores are not required.'}
+                </p>
+              </div>
+            )}
+
+            <FormField
+              control={form.control}
+              name="venue"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Venue</FormLabel>
+                  <FormControl>
+                    <Input {...field} className="w-full flex-1" />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
             <div className="space-y-4">
               <Button
                 type="button"

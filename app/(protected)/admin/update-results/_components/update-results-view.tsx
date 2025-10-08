@@ -8,15 +8,24 @@ import {
   SelectItem,
   SelectContent,
 } from '@/components/ui/select';
-import { convertDate } from '@/lib/helpers';
+import { convertDate, convertTime } from '@/lib/helpers';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import { Id } from '@/convex/_generated/dataModel';
 import { LoadingScreen } from '@/components/loading-screen';
 import { useCallback } from 'react';
-import { matchColumns } from './matches-columns';
-import { DataTable } from '@/components/data-table/data-table';
+import {
+  Table,
+  TableBody,
+  TableRow,
+  TableHeader,
+  TableHead,
+  TableCell,
+} from '@/components/ui/table';
+import { UpdateMatch } from './update-match';
+import { MatchScore } from '@/app/(public)/schedules/_components/schedules-view';
+import DeleteMatch from './delete-match';
 
 export function UpdateResultsView() {
   const router = useRouter();
@@ -107,7 +116,45 @@ export function UpdateResultsView() {
             <p className="text-lg font-bold mb-2.5">
               Week {index + 1} - {convertDate(date)}
             </p>
-            <DataTable columns={matchColumns} data={matches} />
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent">
+                  <TableHead>Time</TableHead>
+                  <TableHead>Division</TableHead>
+                  <TableHead>Home</TableHead>
+                  <TableHead>Result</TableHead>
+                  <TableHead>Visitor</TableHead>
+                  <TableHead>Venue</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {matches.map((match) => (
+                  <TableRow key={match._id} className="hover:bg-transparent">
+                    <TableCell>{convertTime(match.time)}</TableCell>
+                    <TableCell>{getDivision(match.division)}</TableCell>
+                    <TableCell className="w-[200px]">
+                      {match.homeTeam}
+                    </TableCell>
+                    <TableCell className="w-[150px]">
+                      <MatchScore
+                        homeTeamScore={match.homeTeamScore}
+                        awayTeamScore={match.awayTeamScore}
+                        matchStatus={match.matchStatus}
+                      />
+                    </TableCell>
+                    <TableCell>{match.awayTeam}</TableCell>
+                    <TableCell>{match.venue}</TableCell>
+                    <TableCell>{match.type}</TableCell>
+                    <TableCell className="flex items-center gap-2">
+                      <UpdateMatch match={match} />
+                      <DeleteMatch match={match} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         ))}
       </div>
