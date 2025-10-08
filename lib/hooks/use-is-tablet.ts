@@ -16,7 +16,7 @@ export const useIsTablet = () => {
 
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
-  }, [breakpoint]);
+  }, []);
 
   return isTablet;
 };

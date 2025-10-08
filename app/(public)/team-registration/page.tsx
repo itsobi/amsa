@@ -229,7 +229,7 @@ export default function TeamRegistrationPage() {
                 href="/"
                 className="underline underline-offset-4 text-blue-500"
               >
-                "Looking for a team"
+                &quot;Looking for a team&quot;
               </Link>{' '}
               form on our frontpage.
             </li>

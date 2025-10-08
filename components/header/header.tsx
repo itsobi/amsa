@@ -4,10 +4,8 @@ import Navigation from './navigation';
 import { ThemeToggle } from './theme-toggle';
 import { Logo } from './logo';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
 import { UserButton } from './user-button';
-import { LoadingScreen } from '../loading-screen';
 import { useIsTablet } from '@/lib/hooks/use-is-tablet';
 
 function HeaderContainer({ children }: { children: React.ReactNode }) {

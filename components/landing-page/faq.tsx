@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { Card, CardFooter } from '../ui/card';
+import { Card } from '../ui/card';
 
 export function Faq() {
   return (

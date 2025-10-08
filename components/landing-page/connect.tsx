@@ -1,4 +1,3 @@
-import { Facebook, Instagram } from 'lucide-react';
 import { Button } from '../ui/button';
 import { FacebookIcon, InstagramIcon } from './icons';
 

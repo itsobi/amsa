@@ -13,15 +13,10 @@ import {
 import {
   closestCenter,
   DndContext,
-  DragOverlay,
   useSensor,
   useSensors,
   PointerSensor,
   KeyboardSensor,
-  useDndContext,
-  MeasuringStrategy,
-  DropAnimation,
-  defaultDropAnimationSideEffects,
   DragEndEvent,
   UniqueIdentifier,
   DragStartEvent,
@@ -48,11 +43,8 @@ import {
 } from '@/components/ui/table';
 import { TeamColors } from '@/app/(public)/standings/_components/team-colors';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { PageHeading } from '@/components/page-heading';
-import { Pencil } from 'lucide-react';
-import Link from 'next/link';
 import { UpdateStandingsDialog } from './update-standings-dialog';
 
 function SortableItem({ standing }: { standing: Doc<'standings'> }) {
@@ -117,7 +109,7 @@ export function UpdateStandingsView() {
   const [items, setItems] = useState<Doc<'standings'>[]>([]);
   const router = useRouter();
 
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [_, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const fullSeason =
     searchParams.get('season') || 'jn708hbzm6rcaqkwc626swbjy97qw3kc'; // Default to Fall 2025

@@ -53,7 +53,7 @@ const standingsSchema = z.object({
   }),
 });
 
-const getChangedValues = <T extends Record<string, any>>(
+const getChangedValues = <T extends Record<string, number>>(
   values: T,
   defaultValues: T
 ): Partial<T> => {

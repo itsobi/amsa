@@ -46,8 +46,6 @@ export function UpdateResultsView() {
 
   const selectedSeason =
     seasons?.find((s) => s._id === season)?.season ?? 'Fall 2025';
-  const selectedDivision =
-    divisions?.find((d) => d._id === division)?.division ?? 'Premier';
 
   const getDivision = (division: Id<'divisions'>) => {
     return divisions?.find((d) => d._id === division)?.division ?? 'Premier';

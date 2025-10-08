@@ -22,13 +22,7 @@ import { Logo } from './logo';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import {
-  ChevronDown,
-  ChevronRight,
-  Lock,
-  Menu,
-  ShieldUser,
-} from 'lucide-react';
+import { ChevronDown, ChevronRight, Lock, Menu } from 'lucide-react';
 import {
   AMSAPoliciesNavigationItems,
   leagueNavigationItems,

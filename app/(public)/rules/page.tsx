@@ -657,7 +657,7 @@ export default function RulesPage() {
           />
 
           <p className="text-center italic mb-6">
-            See: USSF - "Stronger Policy To Protect Our Referees" on{' '}
+            See: USSF - &quot;Stronger Policy To Protect Our Referees&quot; on{' '}
             <a
               href="https://www.ussoccer.com/rap"
               target="_blank"

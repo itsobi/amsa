@@ -16,7 +16,7 @@ import { api } from '@/convex/_generated/api';
 import { Doc } from '@/convex/_generated/dataModel';
 import { convertDate } from '@/lib/helpers';
 import { useMutation } from 'convex/react';
-import { Trash2 } from 'lucide-react';
+import { Loader, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -88,10 +88,10 @@ export default function DeleteMatch({ match }: { match: Doc<'matches'> }) {
           </DialogClose>
           <Button
             variant="destructive"
-            disabled={confirmText !== 'Delete'}
+            disabled={confirmText !== 'Delete' || isLoading}
             onClick={handleDeleteMatch}
           >
-            Delete
+            {isLoading ? <Loader className="size-4 animate-spin" /> : 'Delete'}
           </Button>
         </DialogFooter>
       </DialogContent>

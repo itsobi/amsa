@@ -1,7 +1,5 @@
 'use client';
 
-import { DndContext } from '@dnd-kit/core';
-
 import { CustomSignInButton } from '@/components/custom-sign-in-button';
 
 import { Authenticated, Unauthenticated } from 'convex/react';

@@ -14,7 +14,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
     if (user.data?.user.id) {
       router.replace('/admin');
     }
-  }, [user]);
+  }, [user, router]);
 
   if (user.isPending) {
     return <LoadingScreen />;

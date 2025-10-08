@@ -11,10 +11,9 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { User } from 'better-auth';
 import { authClient } from '@/lib/auth-client';
-import { LogOut, Pencil, Tally5, TrendingUp } from 'lucide-react';
+import { LogOut, Tally5, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 import Link from 'next/link';
 
 export function UserButton({ user }: { user: User }) {

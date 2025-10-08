@@ -14,7 +14,6 @@ import {
   NotebookText,
   Phone,
   ShieldAlert,
-  ShieldCheck,
   Table,
   Trees,
   Users,

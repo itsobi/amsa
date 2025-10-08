@@ -24,7 +24,7 @@ import {
 import { convertDate, convertTime } from '@/lib/helpers';
 import { LoadingScreen } from '@/components/loading-screen';
 import { Button } from '@/components/ui/button';
-import { Pencil, Printer } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import Link from 'next/link';
 import { authClient } from '@/lib/auth-client';
 
