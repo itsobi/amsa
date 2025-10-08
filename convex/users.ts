@@ -1,5 +1,10 @@
-import { ADMIN_EMAILS } from '@/emails';
 import { mutation } from './_generated/server';
+
+if (!process.env.ADMIN_EMAILS) {
+  throw new Error('ADMIN_EMAILS is not set');
+}
+
+const ADMIN_EMAILS = process.env.ADMIN_EMAILS.split(',');
 
 export const verifyResetPasswordRequest = mutation({
   args: {},

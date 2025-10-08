@@ -1,6 +1,11 @@
 import { v } from 'convex/values';
 import { mutation } from './_generated/server';
-import { ADMIN_EMAILS } from '@/emails';
+
+if (!process.env.ADMIN_EMAILS) {
+  throw new Error('ADMIN_EMAILS is not set');
+}
+
+const ADMIN_EMAILS = process.env.ADMIN_EMAILS.split(',');
 
 export const createMatches = mutation({
   args: {

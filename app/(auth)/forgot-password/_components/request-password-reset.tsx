@@ -27,9 +27,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
-import { ADMIN_EMAILS } from '@/emails';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+
+if (!process.env.NEXT_PUBLIC_ADMIN_EMAILS) {
+  throw new Error('NEXT_PUBLIC_ADMIN_EMAILS is not set');
+}
+
+const ADMIN_EMAILS = process.env.NEXT_PUBLIC_ADMIN_EMAILS.split(',');
 
 const callbackURL =
   process.env.NODE_ENV === 'production'
