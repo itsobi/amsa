@@ -11,8 +11,8 @@ export const createMatches = mutation({
         date: v.string(),
         homeTeam: v.string(),
         awayTeam: v.string(),
-        homeTeamScore: v.string(),
-        awayTeamScore: v.string(),
+        homeTeamScore: v.number(),
+        awayTeamScore: v.number(),
         venue: v.string(),
         type: v.string(),
         time: v.string(),
@@ -41,8 +41,18 @@ export const updateMatch = mutation({
   args: {
     match: v.object({
       _id: v.id('matches'),
-      homeTeamScore: v.string(),
-      awayTeamScore: v.string(),
+      homeTeamScore: v.optional(v.number()),
+      awayTeamScore: v.optional(v.number()),
+      matchStatus: v.optional(
+        v.union(
+          v.literal('completed'),
+          v.literal('postponed'),
+          v.literal('forfeit'),
+          v.literal('cancelled')
+        )
+      ),
+      time: v.optional(v.string()),
+      venue: v.optional(v.string()),
     }),
   },
   handler: async (ctx, args) => {
@@ -56,8 +66,7 @@ export const updateMatch = mutation({
         };
       }
       await ctx.db.patch(args.match._id, {
-        homeTeamScore: args.match.homeTeamScore,
-        awayTeamScore: args.match.awayTeamScore,
+        ...args.match,
       });
       return {
         success: true,
@@ -69,6 +78,32 @@ export const updateMatch = mutation({
         success: false,
         message:
           error instanceof Error ? error.message : 'An unknown error occurred',
+      };
+    }
+  },
+});
+
+export const deleteMatch = mutation({
+  args: {
+    matchId: v.id('matches'),
+  },
+  handler: async (ctx, args) => {
+    try {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!ADMIN_EMAILS.includes(identity?.email as string)) {
+        throw new Error('Unauthorized');
+      }
+      await ctx.db.delete(args.matchId);
+      return {
+        success: true,
+        message: 'Match deleted successfully',
+      };
+    } catch (error) {
+      console.error('Error deleting match:', error);
+      return {
+        success: false,
+        message:
+          error instanceof Error ? error.message : 'Unable to delete match',
       };
     }
   },

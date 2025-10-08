@@ -17,11 +17,19 @@ export default defineSchema({
     date: v.string(), // YYYY-MM-DD
     homeTeam: v.string(),
     awayTeam: v.string(),
-    homeTeamScore: v.string(),
-    awayTeamScore: v.string(),
+    homeTeamScore: v.optional(v.number()),
+    awayTeamScore: v.optional(v.number()),
     venue: v.string(),
     type: v.string(),
     time: v.string(), // HH:MM
+    matchStatus: v.optional(
+      v.union(
+        v.literal('completed'),
+        v.literal('postponed'),
+        v.literal('forfeit'),
+        v.literal('cancelled')
+      )
+    ),
   }).index('by_season_division', ['season', 'division']),
   standings: defineTable({
     season: v.id('fullSeasons'),

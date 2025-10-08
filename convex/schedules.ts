@@ -22,6 +22,12 @@ export const getSchedule = query({
       return acc;
     }, {} as Record<string, typeof matches>);
 
+    for (const date in groupedMatches) {
+      groupedMatches[date].sort((a, b) => {
+        return a.time.localeCompare(b.time);
+      });
+    }
+
     return groupedMatches;
   },
 });
