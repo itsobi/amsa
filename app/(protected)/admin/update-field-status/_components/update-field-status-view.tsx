@@ -19,10 +19,10 @@ export function UpdateFieldStatusView({
     (field) => field.field === 'Onion Creek Soccer Complex'
   );
   const sempField = fields.find(
-    (field) => field.field === 'South East Metropolitan Field'
+    (field) => field.field === 'Southeast Metropolitan Field'
   );
   const nempField = fields.find(
-    (field) => field.field === 'North East Metropolitan Field'
+    (field) => field.field === 'Northeast Metropolitan Field'
   );
   const empField = fields.find(
     (field) => field.field === 'East Metropolitan Park'
