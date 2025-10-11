@@ -11,7 +11,7 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { User } from 'better-auth';
 import { authClient } from '@/lib/auth-client';
-import { LogOut, Tally5, TrendingUp } from 'lucide-react';
+import { LogOut, Tally5, Trees, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -64,6 +64,12 @@ export function UserButton({ user }: { user: User }) {
           <Link href="/admin/update-standings">
             <TrendingUp className="size-4" />
             <span>Update Standings</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/admin/update-field-status">
+            <Trees className="size-4" />
+            <span>Update Field Status</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleSignOut}>

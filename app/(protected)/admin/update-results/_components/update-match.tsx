@@ -50,7 +50,6 @@ const formSchema = z.object({
 });
 
 export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
-  console.log(match);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 

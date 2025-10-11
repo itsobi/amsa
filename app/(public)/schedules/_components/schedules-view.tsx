@@ -26,7 +26,6 @@ import { LoadingScreen } from '@/components/loading-screen';
 import { Button } from '@/components/ui/button';
 import { Pencil } from 'lucide-react';
 import Link from 'next/link';
-import { authClient } from '@/lib/auth-client';
 
 export function MatchScore({
   homeTeamScore,
@@ -62,8 +61,6 @@ export function SchedulesView() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const session = authClient.useSession();
 
   const season =
     searchParams.get('season') || 'jd7cstf17v6hjyfgtntqbgktsx7qq609'; // Default to Fall 2025
@@ -102,7 +99,17 @@ export function SchedulesView() {
 
   return (
     <div className="mb-5">
-      <PageHeading title="Schedules" />
+      <PageHeading
+        title="Schedules"
+        action={
+          <Link href="/admin/update-results">
+            <Button variant="outline">
+              <Pencil className="size-4" />
+              Update Results
+            </Button>
+          </Link>
+        }
+      />
       <div className="flex items-center justify-between">
         <Select
           defaultValue={selectedSeason}
@@ -145,15 +152,6 @@ export function SchedulesView() {
           <h4>
             {selectedSeason} - {selectedDivision}
           </h4>
-
-          {session.data?.user.id && (
-            <Link href={`/admin/update-results`}>
-              <Button variant="outline">
-                <Pencil className="size-4" />
-                Update Results
-              </Button>
-            </Link>
-          )}
         </div>
 
         <div className="flex flex-col gap-10 mt-5">

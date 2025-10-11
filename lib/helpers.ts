@@ -13,3 +13,13 @@ export const convertTime = (time: string) => {
   const hour12 = hour % 12 || 12;
   return `${hour12}:${minutes} ${ampm}`;
 };
+
+export const formatPhoneNumber = (phoneNumber: string) => {
+  if (phoneNumber.length !== 10) {
+    return phoneNumber;
+  }
+  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
+    3,
+    6
+  )}-${phoneNumber.slice(6)}`;
+};

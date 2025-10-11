@@ -25,6 +25,7 @@ import { usePathname } from 'next/navigation';
 import { ChevronDown, ChevronRight, Lock, Menu } from 'lucide-react';
 import {
   AMSAPoliciesNavigationItems,
+  fieldNavigationItems,
   leagueNavigationItems,
   sheetNavigationItems,
 } from '@/lib/routes';
@@ -294,6 +295,7 @@ export default function Navigation() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
             <Link
@@ -307,20 +309,23 @@ export default function Navigation() {
             </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
-
         <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link
-              href="/fields"
-              className={cn(
-                linkClassName,
-                pathname === '/fields' && 'bg-accent'
-              )}
-            >
-              Fields
-            </Link>
-          </NavigationMenuLink>
+          <NavigationMenuTrigger>Fields</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[250px] gap-1">
+              {fieldNavigationItems.map((item) => (
+                <ListItem
+                  key={item.label}
+                  href={item.href}
+                  label={item.label}
+                  icon={<item.icon className="size-4" />}
+                  isActive={pathname === item.href}
+                />
+              ))}
+            </ul>
+          </NavigationMenuContent>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
             <Link

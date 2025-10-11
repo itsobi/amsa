@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as division from "../division.js";
 import type * as email from "../email.js";
+import type * as fields from "../fields.js";
 import type * as fullSeasons from "../fullSeasons.js";
 import type * as http from "../http.js";
 import type * as matches from "../matches.js";
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   division: typeof division;
   email: typeof email;
+  fields: typeof fields;
   fullSeasons: typeof fullSeasons;
   http: typeof http;
   matches: typeof matches;

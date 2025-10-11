@@ -48,4 +48,11 @@ export default defineSchema({
     points: v.number(),
     tablePosition: v.optional(v.number()),
   }).index('by_season_division', ['season', 'division']),
+  fields: defineTable({
+    field: v.string(),
+    phone: v.string(),
+    status: v.union(v.literal('open'), v.literal('closed'), v.literal('n/a')),
+    statusNotes: v.string(),
+    updatedAt: v.optional(v.number()),
+  }),
 });

@@ -3,12 +3,14 @@ import {
   BookMarked,
   Calendar,
   Car,
+  CheckCheck,
   CircleAlert,
   ClipboardList,
   CloudRain,
   Drone,
   IdCardLanyard,
   Info,
+  KeyRound,
   Mail,
   NotebookPen,
   NotebookText,
@@ -24,7 +26,6 @@ import {
 export const sheetNavigationItems = [
   {
     label: 'League',
-    href: '/league',
     icon: ClipboardList,
     subItems: [
       { label: 'Schedules', href: '/schedules', icon: Calendar },
@@ -80,7 +81,14 @@ export const sheetNavigationItems = [
   {
     label: 'Fields',
     icon: Trees,
-    href: '/fields',
+    subItems: [
+      { label: 'Field Status', href: '/fields', icon: CheckCheck },
+      {
+        label: 'OCSC Field Rental',
+        href: '/ocsc-field-rental',
+        icon: KeyRound,
+      },
+    ],
   },
   {
     label: 'Referees',
@@ -104,6 +112,11 @@ export const leagueNavigationItems = [
     icon: NotebookPen,
   },
   { label: 'AMSA Rules', href: '/rules', icon: NotebookText },
+];
+
+export const fieldNavigationItems = [
+  { label: 'Field Status', href: 'fields', icon: CheckCheck },
+  { label: 'OCSC Field Rental', href: 'ocsc-field-rental', icon: KeyRound },
 ];
 
 export const AMSAPoliciesNavigationItems = [

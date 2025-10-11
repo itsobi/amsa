@@ -77,9 +77,7 @@ export function StandingsView() {
 
   return (
     // TODO: For OVER 50 TABLES: ** This division has a maximum goal differential per game of 3 **
-    <div>
-      <PageHeading title="Standings" />
-
+    <>
       <div className="flex items-center justify-between">
         <Select
           defaultValue={fullSeason}
@@ -120,12 +118,6 @@ export function StandingsView() {
       <div className="mt-10">
         <div className="flex items-center justify-between">
           <h4>{getDivision(division as Id<'divisions'>)}</h4>
-          <Link href="/admin/update-standings">
-            <Button variant="outline">
-              <Pencil className="size-4" />
-              Update Standings
-            </Button>
-          </Link>
         </div>
 
         <div className="my-5">
@@ -184,6 +176,6 @@ export function StandingsView() {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
