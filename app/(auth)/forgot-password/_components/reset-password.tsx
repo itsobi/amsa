@@ -88,7 +88,7 @@ export function ResetPassword({ token }: { token: string }) {
   };
 
   return (
-    <div className="flex items-center justify-center pt-16">
+    <div className="min-h-screen flex items-center justify-center pt-20">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Reset password</CardTitle>

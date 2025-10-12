@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, ChevronRight, Lock, Menu } from 'lucide-react';
 import {
+  aboutNavigationItems,
   AMSAPoliciesNavigationItems,
   fieldNavigationItems,
   leagueNavigationItems,
@@ -340,17 +341,20 @@ export default function Navigation() {
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link
-              href="/about"
-              className={cn(
-                linkClassName,
-                pathname === '/about' && 'bg-accent'
-              )}
-            >
-              About
-            </Link>
-          </NavigationMenuLink>
+          <NavigationMenuTrigger>About</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[180px] gap-1">
+              {aboutNavigationItems.map((item) => (
+                <ListItem
+                  key={item.label}
+                  href={item.href}
+                  label={item.label}
+                  icon={<item.icon className="size-4" />}
+                  isActive={pathname === item.href}
+                />
+              ))}
+            </ul>
+          </NavigationMenuContent>
         </NavigationMenuItem>
         {user.data?.user.id && (
           <NavigationMenuItem>

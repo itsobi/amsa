@@ -1,5 +1,6 @@
 import {
   Ban,
+  Book,
   BookMarked,
   Calendar,
   Car,
@@ -98,7 +99,21 @@ export const sheetNavigationItems = [
   {
     label: 'About',
     icon: Info,
-    href: '/about',
+    subItems: [
+      {
+        label: "Austin Men's Soccer Association",
+        href: '/about',
+        icon: Info,
+      },
+      { label: 'Staff', href: '/staff', icon: Users },
+      {
+        label: 'Executive Committee',
+        href: '/executive-committee',
+        icon: Users,
+      },
+      { label: 'Constitution', href: '/constitution', icon: Book },
+      { label: 'Contact Us', href: '/contact', icon: Phone },
+    ],
   },
 ];
 
@@ -117,6 +132,14 @@ export const leagueNavigationItems = [
 export const fieldNavigationItems = [
   { label: 'Field Status', href: 'fields', icon: CheckCheck },
   { label: 'OCSC Field Rental', href: 'ocsc-field-rental', icon: KeyRound },
+];
+
+export const aboutNavigationItems = [
+  { label: "Austin Men's Soccer Association", href: '/about', icon: Info },
+  { label: 'Staff', href: '/staff', icon: Users },
+  { label: 'Executive Committee', href: '/executive-committee', icon: Users },
+  { label: 'Constitution', href: '/constitution', icon: Book },
+  { label: 'Contact Us', href: '/contact', icon: Phone },
 ];
 
 export const AMSAPoliciesNavigationItems = [
