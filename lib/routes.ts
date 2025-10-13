@@ -130,8 +130,8 @@ export const leagueNavigationItems = [
 ];
 
 export const fieldNavigationItems = [
-  { label: 'Field Status', href: 'fields', icon: CheckCheck },
-  { label: 'OCSC Field Rental', href: 'ocsc-field-rental', icon: KeyRound },
+  { label: 'Field Status', href: '/fields', icon: CheckCheck },
+  { label: 'OCSC Field Rental', href: '/ocsc-field-rental', icon: KeyRound },
 ];
 
 export const aboutNavigationItems = [
