@@ -112,9 +112,15 @@ export function UpdateStandingsView() {
   const [_, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const fullSeason =
-    searchParams.get('season') || 'jn708hbzm6rcaqkwc626swbjy97qw3kc'; // Default to Fall 2025
+    searchParams.get('season') ||
+    (process.env.NODE_ENV === 'production'
+      ? 'jh786wvqvznmk7svxkw5xc95617s2s7c'
+      : 'jn708hbzm6rcaqkwc626swbjy97qw3kc'); // Default to 25/26 season
   const division =
-    searchParams.get('division') || 'j571ej091962d8vs3wkks9qc957qp1hc'; // Default to Premier
+    searchParams.get('division') ||
+    (process.env.NODE_ENV === 'production'
+      ? 'jd7ak83pqwhks638z4qj8qxn0x7s21a7'
+      : 'j571ej091962d8vs3wkks9qc957qp1hc'); // Default to Premier
 
   const fullSeasons = useQuery(api.fullSeasons.getFullSeasons, {});
   const divisions = useQuery(api.division.getDivisions, {});

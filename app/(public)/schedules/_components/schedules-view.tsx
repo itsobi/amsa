@@ -63,9 +63,15 @@ export function SchedulesView() {
   const searchParams = useSearchParams();
 
   const season =
-    searchParams.get('season') || 'jd7cstf17v6hjyfgtntqbgktsx7qq609'; // Default to Fall 2025
+    searchParams.get('season') ||
+    (process.env.NODE_ENV === 'production'
+      ? 'jn769jyxa4vp6nb41g6ryxk55n7s28tr'
+      : 'jd7cstf17v6hjyfgtntqbgktsx7qq609'); // Default to Fall 2025
   const division =
-    searchParams.get('division') || 'j571ej091962d8vs3wkks9qc957qp1hc'; // Default to Premier
+    searchParams.get('division') ||
+    (process.env.NODE_ENV === 'production'
+      ? 'jd7ak83pqwhks638z4qj8qxn0x7s21a7'
+      : 'j571ej091962d8vs3wkks9qc957qp1hc'); // Default to Premier
 
   const seasons = useQuery(api.seasons.getSeasons, {});
   const divisions = useQuery(api.division.getDivisions, {});
@@ -129,7 +135,7 @@ export function SchedulesView() {
           </SelectContent>
         </Select>
         <Select
-          defaultValue={division}
+          defaultValue={division ?? ''}
           onValueChange={(string) =>
             router.push(`${pathname}?${createQueryString('division', string)}`)
           }

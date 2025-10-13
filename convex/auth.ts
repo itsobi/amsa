@@ -7,7 +7,11 @@ import { betterAuth } from 'better-auth';
 import { requireActionCtx } from '@convex-dev/better-auth/utils';
 import { sendEmailVerificationEmail, sendResetPasswordEmail } from './email';
 
-const siteUrl = process.env.SITE_URL!;
+if (!process.env.SITE_URL) {
+  throw new Error('SITE_URL is not set');
+}
+
+const siteUrl = process.env.SITE_URL;
 
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.

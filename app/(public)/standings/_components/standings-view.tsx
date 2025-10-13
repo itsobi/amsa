@@ -17,7 +17,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { PageHeading } from '@/components/page-heading';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -25,9 +24,6 @@ import { Id } from '@/convex/_generated/dataModel';
 import { useCallback } from 'react';
 import { LoadingScreen } from '@/components/loading-screen';
 import { TeamColors } from './team-colors';
-import { Pencil } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 
 export function StandingsView() {
   const router = useRouter();
@@ -35,9 +31,15 @@ export function StandingsView() {
   const searchParams = useSearchParams();
 
   const fullSeason =
-    searchParams.get('season') || 'jn708hbzm6rcaqkwc626swbjy97qw3kc'; // Default to Fall 2025
+    searchParams.get('season') ||
+    (process.env.NODE_ENV === 'production'
+      ? 'jh786wvqvznmk7svxkw5xc95617s2s7c'
+      : 'jn708hbzm6rcaqkwc626swbjy97qw3kc'); // Default to 25/26 season
   const division =
-    searchParams.get('division') || 'j571ej091962d8vs3wkks9qc957qp1hc'; // Default to Premier
+    searchParams.get('division') ||
+    (process.env.NODE_ENV === 'production'
+      ? 'jd7ak83pqwhks638z4qj8qxn0x7s21a7'
+      : 'j571ej091962d8vs3wkks9qc957qp1hc'); // Default to Premier
 
   const fullSeasons = useQuery(api.fullSeasons.getFullSeasons, {});
   const divisions = useQuery(api.division.getDivisions, {});
@@ -49,6 +51,8 @@ export function StandingsView() {
   const isOver50 = [
     'j5707f10haewn58et06gdsxpzh7qq60q',
     'j577kpfwkrk28tk2xe7xjx01817qqcyq',
+    'jd792b1tckwh1p8wpd1njqwbz57s2k6y',
+    'jd74kdabssj2fkwb5wanjmnwbs7s3hm9',
   ].includes(division as Id<'divisions'>);
 
   const getFullSeason = (fullSeason: Id<'fullSeasons'>) => {

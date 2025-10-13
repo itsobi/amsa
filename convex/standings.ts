@@ -11,7 +11,7 @@ export const createStandings = mutation({
   args: {
     standings: v.array(
       v.object({
-        season: v.id('fullSeasons'),
+        fullSeason: v.id('fullSeasons'),
         division: v.id('divisions'),
         team: v.string(),
         teamCaptain: v.string(),
@@ -55,8 +55,8 @@ export const getStandings = query({
   handler: async (ctx, args) => {
     const standings = await ctx.db
       .query('standings')
-      .withIndex('by_season_division', (q) =>
-        q.eq('season', args.fullSeason).eq('division', args.division)
+      .withIndex('by_full_season_division', (q) =>
+        q.eq('fullSeason', args.fullSeason).eq('division', args.division)
       )
       .collect();
 

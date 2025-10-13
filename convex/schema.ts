@@ -32,7 +32,7 @@ export default defineSchema({
     ),
   }).index('by_season_division', ['season', 'division']),
   standings: defineTable({
-    season: v.id('fullSeasons'),
+    fullSeason: v.id('fullSeasons'),
     division: v.id('divisions'),
     team: v.string(),
     teamCaptain: v.string(),
@@ -47,7 +47,7 @@ export default defineSchema({
     goalDifference: v.number(),
     points: v.number(),
     tablePosition: v.optional(v.number()),
-  }).index('by_season_division', ['season', 'division']),
+  }).index('by_full_season_division', ['fullSeason', 'division']),
   fields: defineTable({
     field: v.string(),
     phone: v.string(),
