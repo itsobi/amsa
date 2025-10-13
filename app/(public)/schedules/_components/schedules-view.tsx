@@ -154,12 +154,6 @@ export function SchedulesView() {
       </div>
 
       <div className="mt-10">
-        <div className="flex items-center justify-between">
-          <h4>
-            {selectedSeason} - {selectedDivision}
-          </h4>
-        </div>
-
         <div className="flex flex-col gap-10 mt-5">
           {Object.entries(schedule ?? {}).map(([date, matches], index) => (
             <div key={date}>

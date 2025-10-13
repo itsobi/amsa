@@ -120,10 +120,6 @@ export function StandingsView() {
       </div>
 
       <div className="mt-10">
-        <div className="flex items-center justify-between">
-          <h4>{getDivision(division as Id<'divisions'>)}</h4>
-        </div>
-
         <div className="my-5">
           {isOver50 && (
             <div className="flex items-center justify-center">

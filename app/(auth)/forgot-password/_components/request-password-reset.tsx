@@ -95,7 +95,7 @@ export function RequestPasswordReset() {
   };
 
   return (
-    <div className="flex items-center justify-center pt-20">
+    <div className="flex items-center justify-center pt-10">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Forgot Password</CardTitle>

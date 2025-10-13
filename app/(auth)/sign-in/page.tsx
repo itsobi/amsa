@@ -77,7 +77,7 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="flex items-center justify-center pt-16">
+    <div className="flex items-center justify-center pt-10">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
