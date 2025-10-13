@@ -1,5 +1,3 @@
-'use client';
-
 import { About } from '@/components/landing-page/about';
 import { Connect } from '@/components/landing-page/connect';
 import { Faq } from '@/components/landing-page/faq';

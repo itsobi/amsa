@@ -66,7 +66,9 @@ export default function SignInPage() {
         toast.error('Please verify your email to continue.');
         return;
       }
-      toast.error(error.message);
+      toast.error(
+        error.message || 'An error occurred while trying to sign in.'
+      );
     } else if (data) {
       setFormIsLoading(false);
       toast.success('Signed in successfully');

@@ -69,7 +69,10 @@ export function ResetPassword({ token }: { token: string }) {
 
     if (error) {
       setFormIsLoading(false);
-      toast.error(error.message);
+      toast.error(
+        error.message ||
+          'An error occurred while trying to reset your password.'
+      );
     } else {
       const { error } = await authClient.signIn.email({
         email: formData.email,
@@ -78,7 +81,9 @@ export function ResetPassword({ token }: { token: string }) {
 
       if (error) {
         setFormIsLoading(false);
-        toast.error(error.message);
+        toast.error(
+          error.message || 'An error occurred while trying to sign you in.'
+        );
       } else {
         setFormIsLoading(false);
         toast.success('Password reset successfully');

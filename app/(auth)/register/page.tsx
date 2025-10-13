@@ -82,7 +82,9 @@ export default function RegisterPage() {
     });
 
     if (error) {
-      toast.error(error.message);
+      toast.error(
+        error.message || 'An error occurred while trying to register.'
+      );
       setFormIsLoading(false);
       return;
     }
