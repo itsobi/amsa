@@ -7,5 +7,6 @@ export default async function TeamSchedulePage({
 }) {
   const { teamName } = await params;
   const decodedTeamName = decodeURIComponent(teamName);
+
   return <TeamScheduleView teamName={decodedTeamName} />;
 }

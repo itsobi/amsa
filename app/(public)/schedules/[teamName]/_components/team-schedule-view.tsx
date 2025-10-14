@@ -10,6 +10,15 @@ import {
 } from '@/components/ui/select';
 
 import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty';
+
+import {
   Table,
   TableBody,
   TableCell,
@@ -24,6 +33,9 @@ import { convertDate, convertTime } from '@/lib/helpers';
 import { useQuery } from 'convex/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Ban } from 'lucide-react';
 
 interface Props {
   teamName: string;
@@ -60,6 +72,27 @@ export function TeamScheduleView({ teamName }: Props) {
 
   if (teamSchedule === undefined) {
     return <LoadingScreen />;
+  }
+
+  if (teamSchedule.length === 0) {
+    return (
+      <Empty className="min-h-[60vh] flex items-center justify-center">
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Ban />
+          </EmptyMedia>
+          <EmptyTitle>Not Found</EmptyTitle>
+          <EmptyDescription>
+            The team you are looking for does not exist.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button asChild>
+            <Link href="/schedules">Go Back To Schedules</Link>
+          </Button>
+        </EmptyContent>
+      </Empty>
+    );
   }
 
   return (
