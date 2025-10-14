@@ -201,7 +201,11 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
                     {...field}
                     type="number"
                     value={field.value ?? ''}
-                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
                     aria-invalid={fieldState.invalid}
                   />
                 </Field>
@@ -219,7 +223,11 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
                     {...field}
                     type="number"
                     value={field.value ?? ''}
-                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
                     aria-invalid={fieldState.invalid}
                   />
                 </Field>
