@@ -37,8 +37,8 @@ const formSchema = z.object({
   matchStatus: z.enum(['completed', 'postponed', 'cancelled', 'forfeit'], {
     message: 'Match status is required',
   }),
-  homeTeamScore: z.number().min(0),
-  awayTeamScore: z.number().min(0),
+  homeTeamScore: z.number().min(0).nullable(),
+  awayTeamScore: z.number().min(0).nullable(),
   time: z.string().min(4, {
     message: 'Time is required and must be in the format HH:MM',
   }),
@@ -57,8 +57,8 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       matchStatus: match.matchStatus ?? 'completed',
-      homeTeamScore: match.homeTeamScore ?? 0,
-      awayTeamScore: match.awayTeamScore ?? 0,
+      homeTeamScore: match.homeTeamScore ?? null,
+      awayTeamScore: match.awayTeamScore ?? null,
       time: match.time,
       venue: match.venue,
     },
@@ -82,13 +82,19 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const changedValues: Partial<z.infer<typeof formSchema>> = {};
-    // Compare each field and add to changedValues if different
+    const changedValues: {
+      matchStatus?: typeof values.matchStatus;
+      homeTeamScore?: number | undefined;
+      awayTeamScore?: number | undefined;
+      time?: string;
+      venue?: string;
+    } = {};
+
     if (values.homeTeamScore !== match.homeTeamScore) {
-      changedValues.homeTeamScore = values.homeTeamScore;
+      changedValues.homeTeamScore = values.homeTeamScore ?? undefined;
     }
     if (values.awayTeamScore !== match.awayTeamScore) {
-      changedValues.awayTeamScore = values.awayTeamScore;
+      changedValues.awayTeamScore = values.awayTeamScore ?? undefined;
     }
     if (values.matchStatus !== match.matchStatus) {
       changedValues.matchStatus = values.matchStatus;
