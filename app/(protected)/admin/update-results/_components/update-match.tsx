@@ -37,8 +37,8 @@ const formSchema = z.object({
   matchStatus: z.enum(['completed', 'postponed', 'cancelled', 'forfeit'], {
     message: 'Match status is required',
   }),
-  homeTeamScore: z.number().min(0).nullable(),
-  awayTeamScore: z.number().min(0).nullable(),
+  homeTeamScore: z.optional(z.number().min(0)),
+  awayTeamScore: z.optional(z.number().min(0)),
   time: z.string().min(4, {
     message: 'Time is required and must be in the format HH:MM',
   }),
@@ -57,8 +57,8 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       matchStatus: match.matchStatus ?? 'completed',
-      homeTeamScore: match.homeTeamScore ?? null,
-      awayTeamScore: match.awayTeamScore ?? null,
+      homeTeamScore: match.homeTeamScore ?? undefined,
+      awayTeamScore: match.awayTeamScore ?? undefined,
       time: match.time,
       venue: match.venue,
     },
@@ -260,7 +260,7 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
             <Button
               type="submit"
               form="update-match"
-              disabled={!form.formState.isValid || isLoading}
+              disabled={!form.formState.isDirty || isLoading}
             >
               {isLoading ? (
                 <Loader className="size-4 animate-spin" />
