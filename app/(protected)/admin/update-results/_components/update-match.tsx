@@ -260,9 +260,7 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
             <Button
               type="submit"
               form="update-match"
-              disabled={
-                !form.formState.isValid || !form.formState.isDirty || isLoading
-              }
+              disabled={!form.formState.isValid || isLoading}
             >
               {isLoading ? (
                 <Loader className="size-4 animate-spin" />
