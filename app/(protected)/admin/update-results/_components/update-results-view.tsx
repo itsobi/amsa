@@ -125,9 +125,9 @@ export function UpdateResultsView() {
                 <TableRow className="hover:bg-transparent">
                   <TableHead>Time</TableHead>
                   <TableHead>Division</TableHead>
-                  <TableHead>Home</TableHead>
+                  <TableHead className="w-[200px]">Home</TableHead>
                   <TableHead>Result</TableHead>
-                  <TableHead>Visitor</TableHead>
+                  <TableHead className="w-[200px]">Visitor</TableHead>
                   <TableHead>Venue</TableHead>
                   <TableHead>Type</TableHead>
                   <TableHead />
