@@ -95,8 +95,8 @@ export function ResetPassword({ token }: { token: string }) {
         <CardHeader>
           <CardTitle>Reset password</CardTitle>
           <CardDescription>
-            Please enter your name, email and password to create an reset your
-            password. After verification, we will sign you in automatically.
+            Please enter your email and new password to reset your password.
+            After verification, we will sign you in automatically.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -137,6 +137,7 @@ export function ResetPassword({ token }: { token: string }) {
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
                       autoComplete="off"
+                      type="password"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -158,6 +159,7 @@ export function ResetPassword({ token }: { token: string }) {
                       aria-invalid={fieldState.invalid}
                       placeholder="********"
                       autoComplete="off"
+                      type="password"
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
