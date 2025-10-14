@@ -213,6 +213,7 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
                       )
                     }
                     aria-invalid={fieldState.invalid}
+                    autoComplete="off"
                   />
                 </Field>
               )}
@@ -235,6 +236,7 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
                       )
                     }
                     aria-invalid={fieldState.invalid}
+                    autoComplete="off"
                   />
                 </Field>
               )}

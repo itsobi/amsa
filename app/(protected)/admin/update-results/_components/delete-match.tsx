@@ -54,7 +54,7 @@ export default function DeleteMatch({ match }: { match: Doc<'matches'> }) {
           </DialogDescription>
         </DialogHeader>
 
-        <div>
+        <form id="delete-match" onSubmit={handleDeleteMatch}>
           <div className="text-sm mb-4">
             <div className="text-sm text-center text-muted-foreground">
               <span>{convertDate(match.date)} - </span>
@@ -76,9 +76,10 @@ export default function DeleteMatch({ match }: { match: Doc<'matches'> }) {
               value={confirmText}
               onChange={(e) => setConfirmText(e.target.value)}
               placeholder="Delete"
+              autoComplete="off"
             />
           </div>
-        </div>
+        </form>
 
         <DialogFooter>
           <DialogClose asChild>
@@ -89,7 +90,8 @@ export default function DeleteMatch({ match }: { match: Doc<'matches'> }) {
           <Button
             variant="destructive"
             disabled={confirmText !== 'Delete' || isLoading}
-            onClick={handleDeleteMatch}
+            form="delete-match"
+            type="submit"
           >
             {isLoading ? <Loader className="size-4 animate-spin" /> : 'Delete'}
           </Button>
