@@ -8,19 +8,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -28,6 +19,12 @@ import Link from 'next/link';
 import { toast } from 'sonner';
 import { Loader } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 
 if (!process.env.NEXT_PUBLIC_ADMIN_EMAILS) {
   throw new Error('ADMIN_EMAILS is not set');
@@ -110,73 +107,83 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="John Doe" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+          <form id="register-form" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="register-form-name">Name</FieldLabel>
+                    <Input
+                      {...field}
+                      id="register-form-name"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="John Doe"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
                     )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="example@gmail.com" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            placeholder="********"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full mt-8"
-                disabled={!form.formState.isValid || formIsLoading}
-              >
-                {formIsLoading ? (
-                  <Loader className="size-4 animate-spin" />
-                ) : (
-                  'Register'
+                  </Field>
                 )}
-              </Button>
-            </form>
-          </Form>
+              />
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="register-form-email">Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id="register-form-email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="example@gmail.com"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="register-form-password">
+                      Password
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="register-form-password"
+                      type="password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="********"
+                    />
+
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+
+            <Button
+              type="submit"
+              className="w-full mt-8"
+              form="register-form"
+              disabled={!form.formState.isValid || formIsLoading}
+            >
+              {formIsLoading ? (
+                <Loader className="size-4 animate-spin" />
+              ) : (
+                'Register'
+              )}
+            </Button>
+          </form>
         </CardContent>
 
         <p className="text-center text-sm text-muted-foreground">

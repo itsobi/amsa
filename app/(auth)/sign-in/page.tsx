@@ -1,14 +1,5 @@
 'use client';
 
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -23,13 +14,20 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Loader } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 
 const signInFormSchema = z.object({
   email: z.email({
@@ -86,66 +84,74 @@ export default function SignInPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="example@gmail.com" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <div className="flex items-center">
-                          <FormLabel>Password</FormLabel>
-                          <Link
-                            className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-muted-foreground"
-                            href="/forgot-password"
-                          >
-                            Forgot your password?
-                          </Link>
-                        </div>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            placeholder="********"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
+          <form id="sign-in-form" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel htmlFor="sign-in-form-email">Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id="sign-in-form-email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="example@gmail.com"
+                      autoComplete="off"
+                    />
 
-              <Button
-                type="submit"
-                className="w-full mt-8"
-                disabled={!form.formState.isValid || formIsLoading}
-              >
-                {formIsLoading ? (
-                  <Loader className="size-4 animate-spin" />
-                ) : (
-                  'Login'
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
-              </Button>
-            </form>
-          </Form>
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel
+                      htmlFor="sign-in-form-password"
+                      className="flex items-center justify-between"
+                    >
+                      Password
+                      <Link
+                        href="/forgot-password"
+                        className="text-xs text-muted-foreground hover:underline"
+                      >
+                        Forgot password?
+                      </Link>
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="sign-in-form-password"
+                      type="password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="********"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+
+            <Button
+              type="submit"
+              className="w-full mt-8"
+              form="sign-in-form"
+              disabled={!form.formState.isValid || formIsLoading}
+            >
+              {formIsLoading ? (
+                <Loader className="size-4 animate-spin" />
+              ) : (
+                'Login'
+              )}
+            </Button>
+          </form>
         </CardContent>
 
         <p className="text-center text-sm text-muted-foreground">

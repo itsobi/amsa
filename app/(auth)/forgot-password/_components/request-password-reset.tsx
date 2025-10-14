@@ -1,14 +1,5 @@
 'use client';
 
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form';
-
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
@@ -22,13 +13,15 @@ import {
 } from '@/components/ui/card';
 
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { Field, FieldError, FieldLabel } from '@/components/ui/field';
+import { FieldGroup } from '@/components/ui/field';
 
 if (!process.env.NEXT_PUBLIC_ADMIN_EMAILS) {
   throw new Error('NEXT_PUBLIC_ADMIN_EMAILS is not set');
@@ -66,13 +59,6 @@ export function RequestPasswordReset() {
       return;
     }
 
-    const verifyUserResponse = await verifyUser();
-
-    if (!verifyUserResponse.success) {
-      toast.error(verifyUserResponse.message);
-      return;
-    }
-
     await authClient.requestPasswordReset(
       {
         email: formData.email,
@@ -104,37 +90,47 @@ export function RequestPasswordReset() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-2">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="example@gmail.com" />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full mt-8"
-                disabled={!form.formState.isValid || formIsLoading}
-              >
-                {formIsLoading ? (
-                  <Loader className="size-4 animate-spin" />
-                ) : (
-                  'Register'
+          <form
+            id="request-password-reset-form"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <FieldGroup>
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="request-password-reset-form-email">
+                      Email
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="request-password-reset-form-email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="example@gmail.com"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
                 )}
-              </Button>
-            </form>
-          </Form>
+              />
+            </FieldGroup>
+
+            <Button
+              type="submit"
+              className="w-full mt-8"
+              form="request-password-reset-form"
+              disabled={!form.formState.isValid || formIsLoading}
+            >
+              {formIsLoading ? (
+                <Loader className="size-4 animate-spin" />
+              ) : (
+                'Request Password Reset'
+              )}
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>

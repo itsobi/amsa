@@ -8,18 +8,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form';
 import { Loader, Pencil } from 'lucide-react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
@@ -34,6 +26,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 
 const formSchema = z.object({
   matchStatus: z.enum(['completed', 'postponed', 'cancelled', 'forfeit'], {
@@ -78,7 +76,7 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
 
   const watchedMatchStatus = form.watch('matchStatus');
 
-  const closeDialog = () => {
+  const handleCloseDialog = () => {
     setIsOpen(false);
     form.reset();
   };
@@ -137,7 +135,7 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
       }}
     >
       <DialogTrigger>
-        <Pencil className="size-3 lg:size-3.5 text-blue-500 cursor-pointer" />
+        <Pencil className="size-3 lg:size-3.5 text-green-500 cursor-pointer" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -147,120 +145,119 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
           </DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="flex items-center justify-between gap-4 w-full">
-              <FormField
-                control={form.control}
-                name="matchStatus"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Match Status</FormLabel>
-                    <Select
-                      {...field}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-full flex-1">
-                        <SelectValue placeholder="Select match status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="completed">Completed</SelectItem>
-                        <SelectItem value="postponed">Postponed</SelectItem>
-                        <SelectItem value="forfeit">Forfeit</SelectItem>
-                        <SelectItem value="cancelled">Cancelled</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="time"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Time</FormLabel>
-                    <FormControl>
-                      <Input {...field} className="w-full flex-1" />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            {watchedMatchStatus === 'completed' ||
-            watchedMatchStatus === 'forfeit' ? (
-              <div className="flex items-center justify-between gap-4 w-full">
-                <FormField
-                  control={form.control}
-                  name="homeTeamScore"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>{match.homeTeam}</FormLabel>
-                      <FormControl>
-                        <Input {...field} className="w-full" type="number" />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="awayTeamScore"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>{match.awayTeam}</FormLabel>
-                      <FormControl>
-                        <Input {...field} className="w-full" />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            ) : (
-              <div className="rounded-lg bg-muted p-4">
-                <p className="text-sm text-muted-foreground">
-                  {watchedMatchStatus === 'postponed'
-                    ? 'This match has been postponed. Scores are not required.'
-                    : 'This match has been cancelled. Scores are not required.'}
-                </p>
-              </div>
-            )}
-
-            <FormField
+        <form id="update-match" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup className="grid grid-cols-2 gap-4 mb-4">
+            <Controller
+              name="matchStatus"
               control={form.control}
-              name="venue"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Venue</FormLabel>
-                  <FormControl>
-                    <Input {...field} className="w-full flex-1" />
-                  </FormControl>
-                </FormItem>
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-match-match-status">
+                    Match Status
+                  </FieldLabel>
+                  <Select
+                    {...field}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectTrigger className="w-full flex-1">
+                      <SelectValue placeholder="Select match status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="postponed">Postponed</SelectItem>
+                      <SelectItem value="forfeit">Forfeit</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
               )}
             />
+            <Controller
+              name="time"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-match-time">Time</FieldLabel>
+                  <Input {...field} aria-invalid={fieldState.invalid} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+          <FieldGroup className="grid grid-cols-2 gap-4 mb-4">
+            <Controller
+              name="homeTeamScore"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-match-home-team-score">
+                    {match.homeTeam}
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    aria-invalid={fieldState.invalid}
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              name="awayTeamScore"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-match-away-team-score">
+                    {match.awayTeam}
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    aria-invalid={fieldState.invalid}
+                  />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+          <FieldGroup className="mb-8">
+            <Controller
+              name="venue"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-match-venue">Venue</FieldLabel>
+                  <Input {...field} aria-invalid={fieldState.invalid} />
+                </Field>
+              )}
+            />
+          </FieldGroup>
 
-            <div className="space-y-4">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={closeDialog}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={!form.formState.isDirty || isLoading}
-              >
-                {isLoading ? (
-                  <Loader className="size-4 animate-spin" />
-                ) : (
-                  'Update'
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
+          <Field orientation="horizontal" className="flex justify-end">
+            <Button type="button" variant="outline" onClick={handleCloseDialog}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              form="update-match"
+              disabled={
+                !form.formState.isValid || !form.formState.isDirty || isLoading
+              }
+            >
+              {isLoading ? (
+                <Loader className="size-4 animate-spin" />
+              ) : (
+                'Update'
+              )}
+            </Button>
+          </Field>
+        </form>
       </DialogContent>
     </Dialog>
   );

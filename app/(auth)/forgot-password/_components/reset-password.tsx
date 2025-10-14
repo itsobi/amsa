@@ -1,14 +1,5 @@
 'use client';
 
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from '@/components/ui/form';
-
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
@@ -23,11 +14,17 @@ import {
 } from '@/components/ui/card';
 
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'sonner';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 
 const resetPasswordFormSchema = z.object({
   email: z.email({
@@ -103,73 +100,86 @@ export function ResetPassword({ token }: { token: string }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="example@gmail.com" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+          <form id="reset-password-form" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="reset-password-form-email">
+                      Email
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="reset-password-form-email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="example@gmail.com"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
                     )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="********" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            type="password"
-                            placeholder="********"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full mt-8"
-                disabled={!form.formState.isValid || formIsLoading}
-              >
-                {formIsLoading ? (
-                  <Loader className="size-4 animate-spin" />
-                ) : (
-                  'Reset Password'
+                  </Field>
                 )}
-              </Button>
-            </form>
-          </Form>
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="reset-password-form-password">
+                      Password
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="reset-password-form-password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="********"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="confirmPassword"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="reset-password-form-confirm-password">
+                      Confirm Password
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="reset-password-form-confirm-password"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="********"
+                      autoComplete="off"
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+
+            <Button
+              type="submit"
+              className="w-full mt-8"
+              form="reset-password-form"
+              disabled={!form.formState.isValid || formIsLoading}
+            >
+              {formIsLoading ? (
+                <Loader className="size-4 animate-spin" />
+              ) : (
+                'Reset Password'
+              )}
+            </Button>
+          </form>
         </CardContent>
       </Card>
     </div>
