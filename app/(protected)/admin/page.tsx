@@ -6,7 +6,7 @@ export default function AdminHomePage() {
     <>
       <PageHeading
         title="Admin Home"
-        description="Welcome to the Admin Home. By being an admin, you can update scores and standings."
+        description="Welcome. By being an admin, you are able to update scores, standings, and field statuses."
       />
       <AdminHomeView />
     </>

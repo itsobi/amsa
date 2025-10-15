@@ -47,7 +47,13 @@ import { toast } from 'sonner';
 import { PageHeading } from '@/components/page-heading';
 import { UpdateStandingsDialog } from './update-standings-dialog';
 
-function SortableItem({ standing }: { standing: Doc<'standings'> }) {
+function SortableItem({
+  standing,
+  index,
+}: {
+  standing: Doc<'standings'>;
+  index: number;
+}) {
   const {
     attributes,
     listeners,
@@ -81,7 +87,9 @@ function SortableItem({ standing }: { standing: Doc<'standings'> }) {
         ⋮⋮
       </TableCell>
 
-      <TableCell>{standing.team}</TableCell>
+      <TableCell className="flex items-center gap-4">
+        <span>{index + 1}</span> <span>{standing.team}</span>
+      </TableCell>
       <TableCell>{standing.teamCaptain}</TableCell>
       <TableCell>
         <TeamColors color1={standing.color1} color2={standing.color2} />
@@ -294,8 +302,12 @@ export function UpdateStandingsView() {
                   items={items.map((item) => item._id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  {items.map((item) => (
-                    <SortableItem key={item._id} standing={item} />
+                  {items.map((item, index) => (
+                    <SortableItem
+                      key={item._id}
+                      standing={item}
+                      index={index}
+                    />
                   ))}
                 </SortableContext>
 

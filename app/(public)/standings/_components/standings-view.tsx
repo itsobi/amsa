@@ -145,9 +145,11 @@ export function StandingsView() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {standings.map((standing) => (
+              {standings.map((standing, index) => (
                 <TableRow key={standing._id} className="hover:bg-transparent">
-                  <TableCell>{standing.team}</TableCell>
+                  <TableCell className="flex items-center gap-4">
+                    <span>{index + 1}</span> <span>{standing.team}</span>
+                  </TableCell>
                   <TableCell>{standing.teamCaptain}</TableCell>
                   <TableCell>
                     <TeamColors

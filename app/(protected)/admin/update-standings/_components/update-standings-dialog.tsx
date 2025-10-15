@@ -113,7 +113,7 @@ export function UpdateStandingsDialog({
       }}
     >
       <DialogTrigger className="cursor-pointer">
-        <Pencil className="size-3 lg:size-3.5 cursor-pointer hover:text-blue-500" />
+        <Pencil className="size-3 lg:size-3.5 cursor-pointer text-green-500 lg:text-current lg:hover:text-green-500" />
       </DialogTrigger>
       <DialogContent className="overflow-y-auto">
         <DialogHeader>

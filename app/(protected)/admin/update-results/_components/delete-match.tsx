@@ -43,7 +43,7 @@ export default function DeleteMatch({ match }: { match: Doc<'matches'> }) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
-        <Trash2 className="size-3 lg:size-3.5 text-destructive cursor-pointer" />
+        <Trash2 className="size-3 lg:size-3.5 text-destructive cursor-pointer lg:text-current lg:hover:text-destructive" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -139,7 +139,7 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
       }}
     >
       <DialogTrigger>
-        <Pencil className="size-3 lg:size-3.5 text-green-500 cursor-pointer" />
+        <Pencil className="size-3 lg:size-3.5 cursor-pointer text-green-500 lg:text-current lg:hover:text-green-500" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
