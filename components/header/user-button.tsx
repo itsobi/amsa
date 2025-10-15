@@ -72,6 +72,7 @@ export function UserButton({ user }: { user: User }) {
             <span>Update Field Status</span>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
           <LogOut className="size-4" />
           Sign Out
