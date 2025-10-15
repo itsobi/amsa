@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
@@ -64,7 +64,7 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
     },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     form.reset({
       matchStatus: match.matchStatus ?? 'completed',
       homeTeamScore: match.homeTeamScore,
@@ -73,8 +73,6 @@ export function UpdateMatch({ match }: { match: Doc<'matches'> }) {
       venue: match.venue,
     });
   }, [match, form]);
-
-  const watchedMatchStatus = form.watch('matchStatus');
 
   const handleCloseDialog = () => {
     setIsOpen(false);

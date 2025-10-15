@@ -273,8 +273,8 @@ export function UpdateStandingsView() {
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent">
-                  <TableHead />
                   {/* Column for drag handle */}
+                  <TableHead />
                   <TableHead>Team Name</TableHead>
                   <TableHead>Team Captain</TableHead>
                   <TableHead>Colors</TableHead>

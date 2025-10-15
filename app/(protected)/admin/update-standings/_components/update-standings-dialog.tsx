@@ -1,56 +1,37 @@
 'use client';
 
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Pencil } from 'lucide-react';
+import { Loader, Pencil } from 'lucide-react';
 import { Doc } from '@/convex/_generated/dataModel';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form';
+import { Controller, useForm } from 'react-hook-form';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { api } from '@/convex/_generated/api';
 import { useMutation } from 'convex/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 const standingsSchema = z.object({
-  gamesPlayed: z.number().min(0, {
-    message: 'Games played must be at least 0.',
-  }),
-  gamesWon: z.number().min(0, {
-    message: 'Games won must be at least 0.',
-  }),
-  gamesDrawn: z.number().min(0, {
-    message: 'Games drawn must be at least 0.',
-  }),
-  gamesLost: z.number().min(0, {
-    message: 'Games lost must be at least 0.',
-  }),
-  goalsScored: z.number().min(0, {
-    message: 'Goals scored must be at least 0.',
-  }),
-  goalsAgainst: z.number().min(0, {
-    message: 'Goals against must be at least 0.',
-  }),
-  goalDifference: z.number(),
-  points: z.number().min(0, {
-    message: 'Points must be at least 0.',
-  }),
+  gamesPlayed: z.number().min(0).optional(),
+  gamesWon: z.number().min(0).optional(),
+  gamesDrawn: z.number().min(0).optional(),
+  gamesLost: z.number().min(0).optional(),
+  goalsScored: z.number().min(0).optional(),
+  goalsAgainst: z.number().min(0).optional(),
+  goalDifference: z.number().optional(),
+  points: z.number().min(0).optional(),
 });
 
 const getChangedValues = <T extends Record<string, number>>(
@@ -77,16 +58,29 @@ export function UpdateStandingsDialog({
   const form = useForm<z.infer<typeof standingsSchema>>({
     resolver: zodResolver(standingsSchema),
     defaultValues: {
-      gamesPlayed: standing.gamesPlayed,
-      gamesWon: standing.gamesWon,
-      gamesDrawn: standing.gamesDrawn,
-      gamesLost: standing.gamesLost,
-      goalsScored: standing.goalsScored,
-      goalsAgainst: standing.goalsAgainst,
-      goalDifference: standing.goalDifference,
-      points: standing.points,
+      gamesPlayed: standing.gamesPlayed ?? 0,
+      gamesWon: standing.gamesWon ?? 0,
+      gamesDrawn: standing.gamesDrawn ?? 0,
+      gamesLost: standing.gamesLost ?? 0,
+      goalsScored: standing.goalsScored ?? 0,
+      goalsAgainst: standing.goalsAgainst ?? 0,
+      goalDifference: standing.goalDifference ?? 0,
+      points: standing.points ?? 0,
     },
   });
+
+  useEffect(() => {
+    form.reset({
+      gamesPlayed: standing.gamesPlayed ?? 0,
+      gamesWon: standing.gamesWon ?? 0,
+      gamesDrawn: standing.gamesDrawn ?? 0,
+      gamesLost: standing.gamesLost ?? 0,
+      goalsScored: standing.goalsScored ?? 0,
+      goalsAgainst: standing.goalsAgainst ?? 0,
+      goalDifference: standing.goalDifference ?? 0,
+      points: standing.points ?? 0,
+    });
+  }, [standing, form]);
 
   const onSubmit = async (values: z.infer<typeof standingsSchema>) => {
     const changedValues = getChangedValues(values, standing);
@@ -109,192 +103,244 @@ export function UpdateStandingsDialog({
   };
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogTrigger className="cursor-pointer">
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+        if (!open) {
+          form.reset();
+        }
+      }}
+    >
+      <DialogTrigger className="cursor-pointer">
         <Pencil className="size-3 lg:size-3.5 cursor-pointer hover:text-blue-500" />
-      </AlertDialogTrigger>
-      <AlertDialogContent className="overflow-y-auto">
-        <AlertDialogHeader>
-          <AlertDialogTitle>{standing.team}</AlertDialogTitle>
-          <AlertDialogDescription className="sr-only">
+      </DialogTrigger>
+      <DialogContent className="overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{standing.team}</DialogTitle>
+          <DialogDescription className="sr-only">
             Update the standings for {standing.team}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between w-full">
-                <FormField
-                  control={form.control}
-                  name="gamesPlayed"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Games Played</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full"
-                          type="number"
-                          onChange={(e) =>
-                            field.onChange(e.target.valueAsNumber)
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="gamesWon"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Games Won</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full"
-                          type="number"
-                          onChange={(e) =>
-                            field.onChange(e.target.valueAsNumber)
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex items-center justify-between w-full">
-                <FormField
-                  control={form.control}
-                  name="gamesDrawn"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Games Played</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full"
-                          type="number"
-                          onChange={(e) =>
-                            field.onChange(e.target.valueAsNumber)
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="gamesLost"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Games Lost</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full"
-                          type="number"
-                          onChange={(e) =>
-                            field.onChange(e.target.valueAsNumber)
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex items-center justify-between w-full">
-                <FormField
-                  control={form.control}
-                  name="goalsScored"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Goals Scored</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full"
-                          type="number"
-                          onChange={(e) =>
-                            field.onChange(e.target.valueAsNumber)
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="goalsAgainst"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Games Lost</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full"
-                          type="number"
-                          onChange={(e) =>
-                            field.onChange(e.target.valueAsNumber)
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex items-center justify-between w-full">
-                <FormField
-                  control={form.control}
-                  name="goalDifference"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Goal Difference</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full"
-                          type="number"
-                          onChange={(e) =>
-                            field.onChange(e.target.valueAsNumber)
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="points"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Points</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full"
-                          type="number"
-                          onChange={(e) =>
-                            field.onChange(e.target.valueAsNumber)
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={!form.formState.isDirty}
-            >
-              Update
-            </Button>
-          </form>
-        </Form>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-      </AlertDialogContent>
-    </AlertDialog>
+          </DialogDescription>
+        </DialogHeader>
+
+        <form id="update-standings" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup className="grid grid-cols-2 gap-4 mb-4">
+            <Controller
+              control={form.control}
+              name="gamesPlayed"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-standings-games-played">
+                    Games Played
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="gamesWon"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-standings-games-won">
+                    Games Won
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+
+          <FieldGroup className="grid grid-cols-2 gap-4 mb-4">
+            <Controller
+              control={form.control}
+              name="gamesDrawn"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-standings-games-drawn">
+                    Games Drawn
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="gamesLost"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-standings-games-lost">
+                    Games Lost
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+
+          <FieldGroup className="grid grid-cols-2 gap-4 mb-4">
+            <Controller
+              control={form.control}
+              name="goalsScored"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-standings-goals-scored">
+                    Goals Scored
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="goalsAgainst"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-standings-goals-against">
+                    Goals Against
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+
+          <FieldGroup className="grid grid-cols-2 gap-4 mb-4">
+            <Controller
+              control={form.control}
+              name="goalDifference"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-standings-goal-difference">
+                    Goal Difference
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) => {
+                      const value =
+                        e.target.value === '' ? null : e.target.valueAsNumber;
+                      if (!isNaN(value as number) || value === null) {
+                        field.onChange(value);
+                      }
+                    }}
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                </Field>
+              )}
+            />
+            <Controller
+              control={form.control}
+              name="points"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="update-standings-points">
+                    Points
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    value={field.value ?? ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === '' ? null : e.target.valueAsNumber
+                      )
+                    }
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                </Field>
+              )}
+            />
+          </FieldGroup>
+
+          <Button
+            type="submit"
+            form="update-standings"
+            className="w-full"
+            disabled={!form.formState.isDirty || form.formState.isLoading}
+          >
+            {form.formState.isLoading ? (
+              <Loader className="size-4 animate-spin" />
+            ) : (
+              'Update'
+            )}
+          </Button>
+        </form>
+        <DialogClose asChild>
+          <Button variant="outline" onClick={() => form.reset()}>
+            Cancel
+          </Button>
+        </DialogClose>
+      </DialogContent>
+    </Dialog>
   );
 }
